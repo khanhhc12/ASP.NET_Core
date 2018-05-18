@@ -23,11 +23,17 @@ namespace HelloWorld
             }
             catch (HttpRequestException hre)
             {
-                return hre.Message;
+                string message = hre.Message;
+                if (hre.InnerException != null && !string.IsNullOrEmpty(hre.InnerException.Message))
+                    message += " >> " + hre.InnerException.Message;
+                return message;
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                string message = ex.Message;
+                if (ex.InnerException != null && !string.IsNullOrEmpty(ex.InnerException.Message))
+                    message += " >> " + ex.InnerException.Message;
+                return message;
             }
         }
 
@@ -48,11 +54,17 @@ namespace HelloWorld
             }
             catch (HttpRequestException hre)
             {
-                return hre.Message;
+                string message = hre.Message;
+                if (hre.InnerException != null && !string.IsNullOrEmpty(hre.InnerException.Message))
+                    message += " >> " + hre.InnerException.Message;
+                return message;
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                string message = ex.Message;
+                if (ex.InnerException != null && !string.IsNullOrEmpty(ex.InnerException.Message))
+                    message += " >> " + ex.InnerException.Message;
+                return message;
             }
         }
     }
