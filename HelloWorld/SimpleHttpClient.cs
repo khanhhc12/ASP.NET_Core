@@ -37,7 +37,7 @@ namespace HelloWorld
             }
         }
 
-        public static async Task<string> PostAsync(string uri, string data)
+        public static async Task<string> PostAsync(string uri, string data, string contentType = "application/json")
         {
             try
             {
@@ -45,7 +45,7 @@ namespace HelloWorld
                 // deadlock ConfigureAwait(false)
                 using (var response = await httpClient.PostAsync(
                     uri,
-                    new StringContent(data == null ? string.Empty : data, Encoding.UTF8, "application/json")
+                    new StringContent(data == null ? string.Empty : data, Encoding.UTF8, contentType)
                     ).ConfigureAwait(false))
                 {
                     response.EnsureSuccessStatusCode();
