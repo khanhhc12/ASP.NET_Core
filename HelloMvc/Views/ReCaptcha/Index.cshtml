@@ -1,0 +1,38 @@
+@{
+    ViewData["Title"] = "ReCaptcha";
+}
+
+<div class="example" style="padding-top: 10px;">
+    <div class="g-recaptcha" data-sitekey="@ViewBag.site_key"></div>
+    <input type="button" id="btnTest" class="btn btn-default" value="Test">
+</div>
+
+@section Scripts
+{
+<script src="https://www.google.com/recaptcha/api.js"></script>
+<script>
+$(function () {
+    $("#btnTest").click(function () {
+        var reCaptchaResponse = $("[name=g-recaptcha-response]").val();
+        if (reCaptchaResponse.length) {
+            $.ajax({
+                url: "/ReCaptcha/SiteVerify",
+                contentType: "application/json",
+                dataType: "json",
+                type: "POST",
+                data: JSON.stringify({
+                    ReCaptchaResponse: reCaptchaResponse
+                }),
+                success: function (rs) {
+                    console.log(rs);
+                    if (typeof rs === "string")
+                        alert(rs);
+                    else
+                        alert(rs.success);
+                }
+            });
+        }
+    });
+});
+</script>
+}

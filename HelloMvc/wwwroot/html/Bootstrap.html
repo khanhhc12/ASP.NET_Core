@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.35.4/css/bootstrap-dialog.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.35.4/js/bootstrap-dialog.js"></script>
+
+    <!-- begin layout -->
+    <style>
+        * {
+            border-radius: 0px !important;
+        }
+
+        body {
+            font-size: 13px;
+        }
+    </style>
+    <!-- end layout -->
+</head>
+
+<body>
+    <div id="example">
+        <button type="button" class="btn btn-default">Default</button>
+    </div>
+
+    <script>
+        $(function () {
+            $(".btn").click(function () {
+                function_name();
+            });
+        });
+
+        function function_name(argument) {
+            BootstrapDialog.show({
+                message: 'Hi Apple!'
+            });
+        }
+    </script>
+</body>
+
+</html>

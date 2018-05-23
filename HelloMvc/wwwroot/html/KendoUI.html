@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2018.1.221/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2018.1.221/styles/kendo.flat.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2018.1.221/styles/kendo.flat.mobile.min.css" />
+
+    <script src="https://kendo.cdn.telerik.com/2018.1.221/js/jquery.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2018.1.221/js/kendo.all.min.js"></script>
+
+    <!-- begin layout -->
+    <style>
+        * {
+            border-radius: 0px !important;
+        }
+
+        body {
+            font-size: 13px;
+        }
+    </style>
+    <!-- end layout -->
+
+    <style>
+        #example {
+            width: 650px;
+        }
+
+        .k-grid .k-grid-content {
+            max-height: 250px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="example">
+        <input type="button" id="create" name="create" value="create" class="k-button">
+        <input type="button" id="update" name="update" value="update" class="k-button">
+        <input type="button" id="destroy" name="destroy" value="destroy" class="k-button">
+        <div id="grid"></div>
+    </div>
+
+    <script>
+        var simpleDataSource = [];
+        for (var i = 1; i <= 20; i++) {
+            simpleDataSource.push({
+                value: guid(),
+                text: "text" + i
+            });
+        }
+        $(function () {
+            var dataSource = new kendo.data.DataSource({
+                transport: {
+                    read: function (options) {
+                        options.success(simpleDataSource);
+                        // notify the data source that the request failed
+                        //options.error(result);
+                    },
+                    update: function (options) {
+                        if (options.data.text.length >= 5) {
+                            // notify the data source that the request succeeded
+                            options.success(options.data);
+                        } else {
+                            // notify the data source that the request failed
+                            alert("error: length < 5");
+                            options.error(options.data);
+                        }
+                    },
+                    destroy: function (options) {
+                        // notify the data source that the request succeeded
+                        options.success(options.data);
+                        // notify the data source that the request failed
+                        //options.error(result);
+                    },
+                    create: function (options) {
+                        // notify the data source that the request succeeded
+                        options.data.value = guid();
+                        options.success(options.data);
+                        // notify the data source that the request failed
+                        //options.error(result);
+                    }
+                },
+                pageSize: 10,
+                schema: {
+                    model: {
+                        id: "value",
+                        fields: {
+                            value: {
+                                editable: false,
+                                nullable: true
+                            },
+                            text: {
+                                validation: {
+                                    required: true
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            $("#grid").kendoGrid({
+                dataSource: dataSource,
+                pageable: true,
+                //height: 550,
+                toolbar: ["create"],
+                columns: [{
+                    field: "value",
+                    title: "value",
+                    width: "300px"
+                }, {
+                    field: "text",
+                    title: "text",
+                    width: "140px"
+                }, {
+                    command: ["edit", "destroy"],
+                    title: "&nbsp;",
+                    width: "160px"
+                }],
+                editable: "inline",
+                selectable: true,
+                filterable: true,
+                sortable: true,
+                noRecords: {
+                    template: "No data available on current page. Current page is: #=this.dataSource.page()#"
+                }
+            });
+
+            $("#create").click(function () {
+                var grid = $("#grid").data("kendoGrid");
+                var dataItem = {
+                    value: guid(),
+                    text: "text new"
+                };
+                grid.dataSource.pushInsert(dataItem);
+                var view = grid.dataSource.view();
+                if ($.grep(view, function (item, index) {
+                        return item.value === dataItem.value;
+                    }).length === 0) {
+                    grid.dataSource.filter([]);
+                    grid.dataSource.sort({});
+                }
+            });
+
+            $("#update").click(function () {
+                var grid = $("#grid").data("kendoGrid");
+                var dataItem = grid.dataItem(grid.select());
+                if (dataItem) {
+                    dataItem.text = dataItem.text + " update";
+                    grid.dataSource.pushUpdate(dataItem);
+                }
+                /*
+                var dataItems = grid.dataItems();
+                for (var i = dataItems.length - 1; i >= 0; i--) {
+                    dataItems[i].ProductName = dataItems[i].ProductName + " *";
+                }
+                grid.dataSource.pushUpdate(dataItems);
+                */
+            });
+
+            $("#destroy").click(function () {
+                var grid = $("#grid").data("kendoGrid");
+                var dataItem = grid.dataItem(grid.select());
+                if (dataItem)
+                    grid.dataSource.pushDestroy(dataItem);
+            });
+        });
+
+        // guid
+        function guid() {
+            function s4() {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                    .toString(16)
+                    .substring(1);
+            }
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+        }
+    </script>
+</body>
+
+</html>
