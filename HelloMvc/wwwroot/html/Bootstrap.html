@@ -38,6 +38,12 @@
                 <div id="divPartialView" style="padding-top: 5px;"></div>
             </div>
         </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Switch</div>
+            <div class="panel-body">
+                <div id="divSwitch"></div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -62,6 +68,12 @@
             });
         });
         // end PartialView
+
+        // begin Switch
+        $(function () {
+            $("#divSwitch").load("Switch.html");
+        });
+        // end Switch
     </script>
 </body>
 
