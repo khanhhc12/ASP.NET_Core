@@ -25,21 +25,43 @@
 
 <body>
     <div id="example">
-        <button type="button" class="btn btn-default">Default</button>
+        <div class="panel panel-default">
+            <div class="panel-heading">BootstrapDialog</div>
+            <div class="panel-body">
+                <button type="button" id="btnShowDialog" class="btn btn-default">Default</button>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">PartialView</div>
+            <div class="panel-body">
+                <button type="button" id="btnLoadView" class="btn btn-default">Default</button>
+                <div id="divPartialView" style="padding-top: 5px;"></div>
+            </div>
+        </div>
     </div>
 
     <script>
+        // begin BootstrapDialog
         $(function () {
-            $(".btn").click(function () {
-                function_name();
+            $("#btnShowDialog").click(function () {
+                BootstrapDialog.show({
+                    message: 'Hello World!'
+                });
             });
         });
+        // end BootstrapDialog
 
-        function function_name(argument) {
-            BootstrapDialog.show({
-                message: 'Hi Apple!'
+        // begin PartialView
+        $(function () {
+            $("#btnLoadView").click(function () {
+                $("#divPartialView").load("PartialView.html", function() {
+                    BootstrapDialog.show({
+                        message: 'Load was performed.'
+                    });
+                });
             });
-        }
+        });
+        // end PartialView
     </script>
 </body>
 
