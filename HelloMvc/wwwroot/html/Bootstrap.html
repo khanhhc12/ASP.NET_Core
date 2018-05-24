@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <meta charset="UTF-8">
     <title></title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.35.4/css/bootstrap-dialog.css">
@@ -13,35 +14,265 @@
     <!-- begin layout -->
     <style>
         * {
-            border-radius: 0px !important;
+            border-radius: 0 !important;
         }
 
         body {
             font-size: 13px;
         }
+
+        .row {
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        [class^=col-] {
+            /* class name starts with col- */
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .table-grid>.row,
+        .row-grid {
+            margin-left: -5px;
+            margin-right: -5px;
+        }
+
+        .table-grid>.row>[class^=col-],
+        .row-grid>[class^=col-] {
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .table-form {
+            margin-top: -2px;
+            margin-bottom: -2px;
+        }
+
+        .table-form>.row {
+            padding-top: 2px;
+            padding-bottom: 2px;
+        }
     </style>
     <!-- end layout -->
+
+    <!-- begin switch mouse0270 -->
+    <style>
+        .material-switch>input[type="checkbox"] {
+            display: none;
+        }
+
+        .material-switch>label {
+            cursor: pointer;
+            height: 0px;
+            position: relative;
+            width: 40px;
+        }
+
+        .material-switch>label::before {
+            background: rgb(0, 0, 0);
+            box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            content: '';
+            height: 16px;
+            margin-top: -8px;
+            position: absolute;
+            opacity: 0.3;
+            transition: all 0.4s ease-in-out;
+            width: 40px;
+        }
+
+        .material-switch>label::after {
+            background: rgb(255, 255, 255);
+            border-radius: 16px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+            content: '';
+            height: 24px;
+            left: -4px;
+            margin-top: -8px;
+            position: absolute;
+            top: -4px;
+            transition: all 0.3s ease-in-out;
+            width: 24px;
+        }
+
+        .material-switch>input[type="checkbox"]:checked+label::before {
+            background: inherit;
+            opacity: 0.5;
+        }
+
+        .material-switch>input[type="checkbox"]:checked+label::after {
+            background: inherit;
+            left: 20px;
+        }
+    </style>
+    <!-- end switch -->
 </head>
 
 <body>
-    <div id="example">
-        <div class="panel panel-default">
-            <div class="panel-heading">BootstrapDialog</div>
-            <div class="panel-body">
-                <button type="button" id="btnShowDialog" class="btn btn-default">Default</button>
+    <div id="example" class="table-grid" style="padding: 5px;">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="panel-group" id="accordion1">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#accordion1" href="#collapseL1">Bootstrap Dialog</a>
+                        </div>
+                        <div id="collapseL1" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <button type="button" id="btnShowDialog" class="btn btn-sm btn-default">Show Dialog</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#accordion1" href="#collapseL2">Partial View</a>
+                        </div>
+                        <div id="collapseL2" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <button type="button" id="btnLoadView" class="btn btn-sm btn-default">Load View</button>
+                                <div id="divPartialView" style="padding-top: 5px;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#accordion1" href="#collapseL3">Material Switch</a>
+                        </div>
+                        <div id="collapseL3" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <!-- List group -->
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        Bootstrap Switch Default
+                                        <div class="material-switch pull-right">
+                                            <input id="someSwitchOptionDefault" name="someSwitchOption001" type="checkbox" />
+                                            <label for="someSwitchOptionDefault" class="label-default"></label>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        Bootstrap Switch Primary
+                                        <div class="material-switch pull-right">
+                                            <input id="someSwitchOptionPrimary" name="someSwitchOption001" type="checkbox" />
+                                            <label for="someSwitchOptionPrimary" class="label-primary"></label>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        Bootstrap Switch Success
+                                        <div class="material-switch pull-right">
+                                            <input id="someSwitchOptionSuccess" name="someSwitchOption001" type="checkbox" />
+                                            <label for="someSwitchOptionSuccess" class="label-success"></label>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        Bootstrap Switch Info
+                                        <div class="material-switch pull-right">
+                                            <input id="someSwitchOptionInfo" name="someSwitchOption001" type="checkbox" />
+                                            <label for="someSwitchOptionInfo" class="label-info"></label>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        Bootstrap Switch Warning
+                                        <div class="material-switch pull-right">
+                                            <input id="someSwitchOptionWarning" name="someSwitchOption001" type="checkbox" />
+                                            <label for="someSwitchOptionWarning" class="label-warning"></label>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        Bootstrap Switch Danger
+                                        <div class="material-switch pull-right">
+                                            <input id="someSwitchOptionDanger" name="someSwitchOption001" type="checkbox" />
+                                            <label for="someSwitchOptionDanger" class="label-danger"></label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">PartialView</div>
-            <div class="panel-body">
-                <button type="button" id="btnLoadView" class="btn btn-default">Default</button>
-                <div id="divPartialView" style="padding-top: 5px;"></div>
-            </div>
-        </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">Switch</div>
-            <div class="panel-body">
-                <div id="divSwitch"></div>
+            <div class="col-sm-6">
+                <div class="panel-group" id="accordion2">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapseR1">Grid System</a>
+                        </div>
+                        <div id="collapseR1" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <!-- row -->
+                                <div style="border: thin solid black;">
+                                    <div class="row">
+                                        <div class="col-sm-12 bg-primary text-center">row</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4 bg-info text-center">col-sm-4</div>
+                                        <div class="col-sm-4 bg-success text-center">col-sm-4</div>
+                                        <div class="col-sm-4 bg-danger text-center">col-sm-4</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4 bg-info text-center">col-sm-4</div>
+                                        <div class="col-sm-4 bg-success text-center">col-sm-4</div>
+                                        <div class="col-sm-4 bg-danger text-center">col-sm-4</div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <!-- table-grid -->
+                                <div style="border: thin solid black;">
+                                    <div class="table-grid">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="bg-primary text-center">table-grid</div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="bg-info text-center">col-sm-4</div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="bg-success text-center">col-sm-4</div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="bg-danger text-center">col-sm-4</div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="bg-info text-center">col-sm-4</div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="bg-success text-center">col-sm-4</div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="bg-danger text-center">col-sm-4</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <!-- table-form -->
+                                <div style="border: thin solid black;">
+                                    <div class="table-form">
+                                        <div class="row">
+                                            <div class="col-sm-12 bg-primary text-center">table-form</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4 bg-info text-center">col-sm-4</div>
+                                            <div class="col-sm-4 bg-success text-center">col-sm-4</div>
+                                            <div class="col-sm-4 bg-danger text-center">col-sm-4</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4 bg-info text-center">col-sm-4</div>
+                                            <div class="col-sm-4 bg-success text-center">col-sm-4</div>
+                                            <div class="col-sm-4 bg-danger text-center">col-sm-4</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -60,7 +291,7 @@
         // begin PartialView
         $(function () {
             $("#btnLoadView").click(function () {
-                $("#divPartialView").load("PartialView.html", function() {
+                $("#divPartialView").load("PartialView.html", function () {
                     BootstrapDialog.show({
                         message: 'Load was performed.'
                     });
@@ -68,12 +299,6 @@
             });
         });
         // end PartialView
-
-        // begin Switch
-        $(function () {
-            $("#divSwitch").load("Switch.html");
-        });
-        // end Switch
     </script>
 </body>
 

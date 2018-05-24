@@ -1,15 +1,14 @@
 <div id="divButtonGroup">
     <div class="btn-group">
-        <button type="button" class="btn btn-primary" data-type="type-primary">primary</button>
-        <button type="button" class="btn btn-success" data-type="type-success">success</button>
-        <button type="button" class="btn btn-danger" data-type="type-danger">danger</button>
+        <button type="button" class="btn btn-sm btn-primary" data-type="type-primary">primary</button>
+        <button type="button" class="btn btn-sm btn-success" data-type="type-success">success</button>
+        <button type="button" class="btn btn-sm btn-danger" data-type="type-danger">danger</button>
     </div>
 
     <script>
-        var btn;
         $(function () {
             $("#divButtonGroup").find("button").click(function () {
-                btn = $(this);
+                var btn = $(this);
                 BootstrapDialog.show({
                     message: btn.html(),
                     type: btn.attr("data-type")
