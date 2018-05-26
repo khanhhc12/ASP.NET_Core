@@ -83,3 +83,11 @@ body {
 }
 
 /* end grid */
+
+/* begin custom */
+
+.width-full {
+    width: 100%;
+}
+
+/* end custom */
