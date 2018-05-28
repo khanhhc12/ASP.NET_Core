@@ -68,3 +68,12 @@
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
+
+textarea.k-textbox {
+    padding-left: .571em;
+}
+
+.k-checkbox-label {
+	font-weight: unset;
+	margin-bottom: unset;
+}
