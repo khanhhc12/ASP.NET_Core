@@ -74,6 +74,11 @@ textarea.k-textbox {
 }
 
 .k-checkbox-label {
-	font-weight: unset;
-	margin-bottom: unset;
+	font-weight: initial;
+	margin-bottom: initial;
+}
+
+.k-filter-menu label {
+	font-weight: initial;
+	margin-bottom: initial;
 }
