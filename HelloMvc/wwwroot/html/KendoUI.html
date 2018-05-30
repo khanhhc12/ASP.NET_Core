@@ -127,12 +127,24 @@
                         </div>
                     </div>
 
+                    <!-- Kendo Filter -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapseR2">Kendo Grid Filter</a>
+                        </div>
+                        <div id="collapseR2" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <div id="grid-filter"></div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- File Saver -->
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapseR2">File Saver</a>
+                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapseR3">File Saver</a>
                         </div>
-                        <div id="collapseR2" class="panel-collapse collapse">
+                        <div id="collapseR3" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <input type="button" id="saveAs" name="saveAs" value="saveAs" class="k-button">
                             </div>
@@ -207,8 +219,7 @@
         for (var i = 1; i <= 20; i++) {
             simpleDataSource.push({
                 value: guid(),
-                text: "text" + i,
-                checked: i % 2 === 0
+                text: "text" + i
             });
         }
         $(function () {
@@ -256,12 +267,6 @@
                                 validation: {
                                     required: true
                                 }
-                            },
-                            checked: {
-                                type: "boolean",
-                                value: {
-                                    editable: false
-                                }
                             }
                         }
                     }
@@ -276,19 +281,15 @@
                 columns: [{
                     field: "value",
                     title: "value",
-                    width: "270px"
+                    width: "280px"
                 }, {
                     field: "text",
                     title: "text",
-                    width: "100px"
-                }, {
-                    field: "checked",
-                    title: "checked",
-                    width: "100px"
+                    width: "150px"
                 }, {
                     command: ["edit", "destroy"],
                     title: "&nbsp;",
-                    width: "160px"
+                    width: "180px"
                 }],
                 editable: "inline",
                 selectable: true,
@@ -349,6 +350,90 @@
             return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
         }
         // end kendoGrid
+
+        // begin Kendo Grid Filter
+        $(function () {
+            var dataSource = new kendo.data.DataSource({
+                data: [{
+                    id: 1,
+                    text: "text1",
+                    date: new Date(),
+                    checked: true
+                }, {
+                    id: 2,
+                    text: "text2",
+                    date: new Date(),
+                    checked: true
+                }, {
+                    id: 3,
+                    text: "text2",
+                    date: new Date(),
+                    checked: false
+                }, {
+                    id: 4,
+                    text: "text3",
+                    date: new Date(),
+                    checked: true
+                }, {
+                    id: 5,
+                    text: "text3",
+                    date: new Date(),
+                    checked: false
+                }],
+                pageSize: 10,
+                schema: {
+                    model: {
+                        id: "id",
+                        fields: {
+                            id: {
+                                type: "number"
+                            },
+                            text: {
+                                type: "string"
+                            },
+                            date: {
+                                type: "date"
+                            },
+                            checked: {
+                                type: "boolean"
+                            }
+                        }
+                    }
+                }
+            });
+
+            $("#grid-filter").kendoGrid({
+                dataSource: dataSource,
+                pageable: true,
+                columns: [{
+                    field: "id",
+                    title: "id",
+                    width: "100px"
+                }, {
+                    field: "text",
+                    title: "text",
+                    width: "100px",
+                    filterable: {
+                        multi: true
+                    }
+                }, {
+                    field: "date",
+                    title: "date",
+                    width: "200px",
+                    format: "{0:yyyy-MM-dd HH:mm:ss}"
+                }, {
+                    field: "checked",
+                    title: "checked",
+                    width: "100px"
+                }],
+                filterable: true,
+                sortable: true,
+                noRecords: {
+                    template: "No data available on current page. Current page is: #=this.dataSource.page()#"
+                }
+            });
+        });
+        // end Kendo Grid Filter
 
         // begin FileSaver
         $(function () {
