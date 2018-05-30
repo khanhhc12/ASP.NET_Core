@@ -96,11 +96,12 @@
 
             // start
             start() {
-                if (!this.myTimer)
+                if (!this.myTimer) {
                     var sender = this;
-                this.myTimer = setInterval(function () {
-                    sender.spin();
-                }, this.speed);
+                    this.myTimer = setInterval(function () {
+                        sender.spin();
+                    }, this.speed);
+                }
             }
 
             // stop
