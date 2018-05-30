@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Text Slot Machine</title>
+
+    <style>
+        canvas {
+            position: absolute;
+            background: #111;
+            height: 200px;
+            width: 200px;
+            left: 0;
+            top: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <canvas></canvas>    
+    </div>
+
+    <script>
+        /* -------------------------------------- */
+        /* ------------  Settings  -------------- */
+        /* -------------------------------------- */
+
+        var chars = [
+            "AAA","BBB","CCC","DDD","EEE",
+            "FFF","GGG","HHH","III","JJJ",
+            "KKK","LLL","MMM","NNN","OOO",
+            "PPP","QQQ","RRR","SSS","TTT",
+            "UUU","VVV","WWW","XXX","YYY",
+            "ZZZ"
+        ];
+        var height = 200;
+        var width = 200;
+        var scale = height/4;
+
+        var canvas = document.querySelector("canvas");
+        var ctx = canvas.getContext("2d");
+
+        (onresize = function(){
+            canvas.width = width;
+            canvas.height = height;
+        })();
+
+        var myTimer = null;
+        function start() {
+            if (!myTimer)
+                myTimer = setInterval(spin, 30);
+        }
+
+        var index = 0;
+        var curVal = null;
+        function spin() {
+            ctx.setTransform(1,0,0,1,0,0);
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = "#622";
+            ctx.fillRect(0,(canvas.height-scale)/2,canvas.width,scale);
+
+            ctx.fillStyle = "#ccc";
+            ctx.textBaseline = "middle";
+            ctx.textAlign = "center";
+            ctx.setTransform(1,0,0,1,Math.floor(canvas.width/2),Math.floor(canvas.height/2));
+
+            var s = 1;
+            ctx.globalAlpha = s;
+            ctx.font = scale*s + "px Helvetica";
+            ctx.fillText(chars[cal(index)],0,0);
+
+            s = 0.90;
+            ctx.globalAlpha = s;
+            ctx.font = scale*s + "px Helvetica";
+            ctx.fillText(chars[cal(index-1)],0,-(height/2*45/100));
+            ctx.fillText(chars[cal(index+1)],0,height/2*45/100);
+
+            s = 0.80;
+            ctx.globalAlpha = s;
+            ctx.font = scale*s + "px Helvetica";
+            ctx.fillText(chars[cal(index-2)],0,-(height/2*80/100));
+            ctx.fillText(chars[cal(index+2)],0,height/2*80/100);
+
+            index++;
+            index = cal(index);
+            curVal = chars[index-1];
+        }
+
+        function stop() {
+            clearInterval(myTimer);
+            myTimer = null;
+        }
+
+        function cal(val) {
+            if (val >= chars.length) return val - chars.length;
+            if (val < 0) return val + chars.length;
+            return val;
+        }
+
+        // init
+        spin();
+    </script>
+</body>
+
+</html>
