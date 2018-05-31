@@ -17,6 +17,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.35.4/js/bootstrap-dialog.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-filestyle/2.1.0/bootstrap-filestyle.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.12.13/xlsx.full.min.js"></script>
+
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -117,9 +119,9 @@
                             <a data-toggle="collapse" data-parent="#accordion1" href="#collapseL3">Material Switch</a>
                         </div>
                         <div id="collapseL3" class="panel-collapse collapse">
-                            <div class="panel-body" style="margin-bottom: -20px;">
+                            <div class="panel-body">
                                 <!-- List group -->
-                                <ul class="list-group">
+                                <ul class="list-group" style="margin-bottom: 0;">
                                     <li class="list-group-item">
                                         Bootstrap Switch Default
                                         <div class="material-switch pull-right">
@@ -173,8 +175,8 @@
                             <a data-toggle="collapse" data-parent="#accordion1" href="#collapseL4">Pretty Checkbox</a>
                         </div>
                         <div id="collapseL4" class="panel-collapse collapse">
-                            <div class="panel-body" style="margin-bottom: -20px;">
-                                <ul class="list-group">
+                            <div class="panel-body">
+                                <ul class="list-group" style="margin-bottom: 0;">
                                     <!-- checkbox -->
                                     <li class="list-group-item">
                                         <!-- primary -->
@@ -285,6 +287,21 @@
                                         </div>
                                     </li>
                                 </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SheetJS -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#accordion1" href="#collapseL5">SheetJS</a>
+                        </div>
+                        <div id="collapseL5" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <div class="form-group form-group-sm">
+                                    <input type="file" id="excelfile" class="filestyle" data-btnClass="btn-sm btn-default" data-text="Read file">
+                                </div>
+                                <div class="div-pre"></div>
                             </div>
                         </div>
                     </div>
@@ -563,6 +580,49 @@
             $(":file").filestyle();
         });
         // end FileStyle
+
+        // begin SheetJS
+        $(function () {
+            document.getElementById("excelfile").addEventListener("change", function (e) {
+                $(".div-pre").empty();
+                var files = e.target.files,
+                    file;
+                if (!files || files.length == 0) return;
+                file = files[0];
+                var fileReader = new FileReader();
+                fileReader.onload = function (e) {
+                    var filename = file.name;
+                    // pre-process data
+                    var binary = "";
+                    var bytes = new Uint8Array(e.target.result);
+                    var length = bytes.byteLength;
+                    for (var i = 0; i < length; i++) {
+                        binary += String.fromCharCode(bytes[i]);
+                    }
+                    // read the file
+                    var workbook = XLSX.read(binary, {
+                        type: "binary",
+                        cellDates: true,
+                        cellStyles: true
+                    });
+                    // gets all the sheetnames of excel in to a variable
+                    var sheet_name_list = workbook.SheetNames;
+                    // iterate through all sheets
+                    sheet_name_list.forEach(function (y) {
+                        // convert the cell value to Json
+                        var exceljson = XLSX.utils.sheet_to_json(workbook.Sheets[y]);
+                        //console.log(exceljson);
+                        $("<pre></pre>").append(
+                            $("<code></code>").html(
+                                JSON.stringify(exceljson, undefined, 2)
+                            )
+                        ).appendTo($(".div-pre"));
+                    });
+                };
+                fileReader.readAsArrayBuffer(file);
+            });
+        });
+        // end SheetJS
     </script>
 </body>
 
