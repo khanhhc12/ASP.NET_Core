@@ -113,6 +113,33 @@
                     this.onStop();
             }
 
+            // setSpeed
+            setSpeed(speed) {
+                if (this.myTimer !== null && speed >= 0 && speed <= 100 && speed !== this.speed)
+                    this.changeSpeed(speed - this.speed);
+            }
+
+            // changeSpeed
+            changeSpeed(speed) {
+                var sender = this;
+                setTimeout(function () {
+                    if (speed > 0) {
+                        sender.speed++;
+                        speed--;
+                    } else {
+                        sender.speed--;
+                        speed++;
+                    }
+                    clearInterval(sender.myTimer);
+                    sender.myTimer = null;
+                    sender.myTimer = setInterval(function () {
+                        sender.spin();
+                    }, sender.speed);
+                    if (speed !== 0)
+                        sender.changeSpeed(speed);
+                }, 100);
+            }
+
             // calculate index
             cal(idx) {
                 if (idx >= this.items.length)
