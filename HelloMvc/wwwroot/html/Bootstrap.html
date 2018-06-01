@@ -457,6 +457,31 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- HTML5 Web Storage -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapseR5">HTML5 Web Storage</a>
+                        </div>
+                        <div id="collapseR5" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <div class="progress">
+                                    <div id="progress-localStorage" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+                                        aria-valuemax="100" style="width: 0%;">
+                                        Local Storage
+                                    </div>
+                                </div>
+                                <div class="progress">
+                                    <div id="progress-sessionStorage" class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar"
+                                        aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                                        Session Storage
+                                    </div>
+                                </div>
+                                <input type="button" id="progress-add" class="btn btn-sm btn-default" value="add">
+                                <input type="button" id="progress-reset" class="btn btn-sm btn-default" value="reset">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -583,7 +608,7 @@
 
         // begin SheetJS
         $(function () {
-            document.getElementById("excelfile").addEventListener("change", function (e) {
+            $("#excelfile").on("change", function (e) {
                 $(".div-pre").empty();
                 var files = e.target.files,
                     file;
@@ -623,6 +648,40 @@
             });
         });
         // end SheetJS
+
+        // begin HTML5 Web Storage
+        $(function () {
+            var $progress_localStorage = $("#progress-localStorage");
+            var $progress_sessionStorage = $("#progress-sessionStorage");
+            if (typeof (Storage) !== "undefined") {
+                // Code for localStorage/sessionStorage.
+                var valuenow1 = parseInt(localStorage.getItem("progress_localStorage"));
+                if (valuenow1)
+                    $progress_localStorage.attr("aria-valuenow", valuenow1).width(valuenow1 + "%");
+                var valuenow2 = parseInt(sessionStorage.getItem("progress_sessionStorage"));
+                if (valuenow2)
+                    $progress_sessionStorage.attr("aria-valuenow", valuenow2).width(valuenow2 + "%");
+            } else {
+                // Sorry! No Web Storage support..
+            }
+            $("#progress-add").on("click", function () {
+                var valuenow1 = parseInt($progress_localStorage.attr("aria-valuenow"));
+                valuenow1 = Math.min(valuenow1 + 10, 100);
+                localStorage.setItem("progress_localStorage", valuenow1);
+                $progress_localStorage.attr("aria-valuenow", valuenow1).width(valuenow1 + "%");
+                var valuenow2 = parseInt($progress_sessionStorage.attr("aria-valuenow"));
+                valuenow2 = Math.min(valuenow2 + 10, 100);
+                $progress_sessionStorage.attr("aria-valuenow", valuenow2).width(valuenow2 + "%");
+                sessionStorage.setItem("progress_sessionStorage", valuenow2);
+            });
+            $("#progress-reset").on("click", function () {
+                $progress_localStorage.attr("aria-valuenow", 0).width(0);
+                localStorage.setItem("progress_localStorage", 0);
+                $progress_sessionStorage.attr("aria-valuenow", 0).width(0);
+                sessionStorage.setItem("progress_sessionStorage", 0);
+            });
+        });
+        // end HTML5 Web Storage
     </script>
 </body>
 
