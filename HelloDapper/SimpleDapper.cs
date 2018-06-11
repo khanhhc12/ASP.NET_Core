@@ -22,7 +22,7 @@ namespace HelloDapper
             using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
-                var list = connection.Query(sql).ToList();
+                var list = connection.Query(sql, commandTimeout: 300).ToList();
                 Console.WriteLine(JsonConvert.SerializeObject(list));
             }
         }
