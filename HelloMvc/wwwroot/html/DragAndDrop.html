@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Drag and Drop</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.35.4/css/bootstrap-dialog.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.35.4/js/bootstrap-dialog.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sortable/0.9.13/jquery-sortable.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="layout.css">
+
+    <style>
+        /* line 1, /Users/jonasvonandrian/jquery-sortable/source/css/jquery-sortable.css.sass */
+
+        body.dragging,
+        body.dragging * {
+            cursor: move !important;
+        }
+
+        /* line 4, /Users/jonasvonandrian/jquery-sortable/source/css/jquery-sortable.css.sass */
+
+        .dragged {
+            position: absolute;
+            top: 0;
+            opacity: 0.5;
+            z-index: 2000;
+        }
+
+        /* line 10, /Users/jonasvonandrian/jquery-sortable/source/css/jquery-sortable.css.sass */
+
+        ol.vertical {
+            margin: 0 0 9px 0;
+            min-height: 10px;
+        }
+
+        /* line 13, /Users/jonasvonandrian/jquery-sortable/source/css/jquery-sortable.css.sass */
+
+        ol.vertical li {
+            display: block;
+            margin: 5px;
+            padding: 5px;
+            border: 1px solid #cccccc;
+            color: #0088cc;
+            background: #eeeeee;
+        }
+
+        /* line 20, /Users/jonasvonandrian/jquery-sortable/source/css/jquery-sortable.css.sass */
+
+        ol.vertical li.placeholder {
+            position: relative;
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+
+        /* line 25, /Users/jonasvonandrian/jquery-sortable/source/css/jquery-sortable.css.sass */
+
+        ol.vertical li.placeholder:before {
+            position: absolute;
+            content: "";
+            width: 0;
+            height: 0;
+            margin-top: -5px;
+            left: -5px;
+            top: -4px;
+            border: 5px solid transparent;
+            border-left-color: red;
+            border-right: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="padding: 5px;">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ol class="example-no-drop vertical">
+                            <li data-name="x">x</li>
+                            <li data-name="y">y</li>
+                            <li data-name="+">+</li>
+                            <li data-name="-">-</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12" style="padding-left: 50px; padding-right: 10px;">
+                        <input type="button" id="btnRun" class="btn btn-default" value="Run" />
+                        <pre><code id="codeResult"></code></pre>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <ol class="example vertical">
+                    <li>fx
+                        <ol></ol>
+                    </li>
+                </ol>
+            </div>
+            <div class="col-sm-4">
+                <ol class="example-delete vertical">
+                    <li>delete
+                        <ol></ol>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function () {
+            $("ol.example-no-drop").sortable({
+                group: "no-drop",
+                drop: false,
+                onDragStart: function ($item, container, _super) {
+                    // Duplicate items of the no drop area
+                    if (!container.options.drop)
+                        $item.clone().insertAfter($item);
+                    _super($item, container);
+                },
+                onDrop: function ($item, container, _super, event) {
+                    // Delete items of the no drag area
+                    if (!container.options.drag)
+                        $item.remove();
+                    _super($item, container);
+                }
+            });
+
+            $("ol.example").sortable({
+                group: "no-drop"
+            });
+
+            $("ol.example-delete").sortable({
+                group: "no-drop",
+                drag: false
+            });
+
+            $("#btnRun").click(function () {
+                var data = $("ol.example").sortable("serialize").get();
+                //JSON.stringify(value[, replacer[, space]])
+                var children = data[0][0].children[0];
+                var items = $.map(children, function (item) {
+                    return item.name;
+                });
+                var fx = items.join(" ");
+                $("#codeResult").html(fx);
+            });
+        });
+    </script>
+</body>
+
+</html>
