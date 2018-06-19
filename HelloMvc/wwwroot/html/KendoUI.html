@@ -108,6 +108,18 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Bootstrap Tooltip -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#accordion1" href="#collapseL3">Bootstrap Tooltip</a>
+                        </div>
+                        <div id="collapseL3" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <div id="grid-tooltip"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-6">
@@ -213,6 +225,34 @@
 
         });
         // end form-group
+
+        // begin Bootstrap Tooltip
+        $(function () {
+            $("#grid-tooltip").kendoGrid({
+                dataSource: [{
+                    value: 1,
+                    text: "One"
+                }, {
+                    value: 2,
+                    text: "Two"
+                }, {
+                    value: 3,
+                    text: "Three"
+                }],
+                dataBound: function (e) {
+                    $("#grid-tooltip [data-toggle='tooltip']").tooltip();
+                },
+                columns: [{
+                    field: "value",
+                    title: "value"
+                }, {
+                    field: "text",
+                    title: "text",
+                    template: "<span data-toggle='tooltip' data-placement='right' data-container='\\#grid-tooltip' title='value: #: value #'>#: text #</span>"
+                }]
+            });
+        });
+        // end Bootstrap Tooltip
 
         // begin kendoGrid
         var simpleDataSource = [];
