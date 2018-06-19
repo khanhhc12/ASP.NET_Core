@@ -3,9 +3,18 @@
 }
 
 body {
-    font-size: 13px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 13px;
+    line-height: initial;
 }
+
+/* begin label */
+
+label {
+    font-weight: 600;
+}
+
+/* end label */
 
 /* begin dialog */
 
