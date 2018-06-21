@@ -110,11 +110,12 @@ label {
     font-size: 13px;
 }
 
-.btn-sm, .btn-xs {
+.btn-sm,
+.btn-xs {
     font-size: 12px;
 }
 
-.btn-group > .dropdown-menu > li > a {
+.btn-group>.dropdown-menu>li>a {
     padding-left: 10px;
     padding-right: 10px;
 }
@@ -137,6 +138,13 @@ label {
 .form-horizontal .radio,
 .form-horizontal .radio-inline {
     padding-top: 4px;
+}
+
+.checkbox input[type=checkbox],
+.checkbox-inline input[type=checkbox],
+.radio input[type=radio],
+.radio-inline input[type=radio] {
+    margin-top: 3px;
 }
 
 /* end checkbox */
