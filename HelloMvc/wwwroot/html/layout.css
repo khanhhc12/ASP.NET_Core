@@ -149,6 +149,26 @@ label {
 
 /* end checkbox */
 
+/* begin nav-tabs */
+
+.nav-tabs {
+    border-bottom: none;
+}
+
+.nav.nav-tabs>li>a {
+    padding: 5px 10px;
+}
+
+.tab-content {
+    border: 1px solid #ddd;
+}
+
+.tab-content>.tab-pane {
+    padding: 10px;
+}
+
+/* end nav-tabs */
+
 /* begin custom */
 
 .full-width {
