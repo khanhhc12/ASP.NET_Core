@@ -502,6 +502,44 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Bootstrap Tab -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapseR6">Bootstrap Tab</a>
+                        </div>
+                        <div id="collapseR6" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul class="nav nav-tabs">
+                                    <li class="active">
+                                        <a data-toggle="tab" href="#menu1">Menu 1</a>
+                                    </li>
+                                    <li>
+                                        <a data-toggle="tab" href="#menu2">Menu 2</a>
+                                    </li>
+                                    <li>
+                                        <a data-toggle="tab" href="#menu3">Menu 3</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div id="menu1" class="tab-pane fade in active">
+                                        <input type="button" id="btn-tab-menu1" class="btn btn-sm btn-default" value="Show">
+                                        <input type="button" id="btn-tab-menu2" class="btn btn-sm btn-default" value="Toggle">
+                                    </div>
+                                    <div id="menu2" class="tab-pane fade">
+                                        <h3>Menu 2</h3>
+                                        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
+                                            laudantium, totam rem aperiam.</p>
+                                    </div>
+                                    <div id="menu3" class="tab-pane fade">
+                                        <h3>Menu 3</h3>
+                                        <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta
+                                            sunt explicabo.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -702,6 +740,26 @@
             });
         });
         // end HTML5 Web Storage
+
+        // begin Bootstrap Tab
+        $(function () {
+            $("#btn-tab-menu1").click(function () {
+                // Select tab by name
+                $(".nav-tabs a[href='#menu2']").tab("show");
+            });
+
+            $("#btn-tab-menu2").click(function () {
+                // Select tab by name
+                if ($(".nav-tabs a[href='#menu3']").parent().hasClass("disabled")) {
+                    $(".nav-tabs a[href='#menu3']").attr("data-toggle", "tab")
+                        .parent().removeClass("disabled");
+                } else {
+                    $(".nav-tabs a[href='#menu3']").removeAttr("data-toggle")
+                        .parent().addClass("disabled");
+                }
+            });
+        });
+        // end Bootstrap Tab
     </script>
 </body>
 
