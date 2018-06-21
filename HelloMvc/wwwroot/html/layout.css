@@ -39,10 +39,21 @@ label {
 /* begin modal */
 
 .modal-header,
+.modal-footer {
+    padding: 5px 10px;
+}
+
+.modal-body {
+    padding: 10px;
+}
+
+/*
+.modal-header,
 .modal-body,
 .modal-footer {
     padding: 10px;
 }
+*/
 
 .modal-content {
     border: 0;
@@ -50,15 +61,26 @@ label {
 
 /* end modal */
 
-/* begin modal */
+/* begin panel */
 
 .panel-heading,
-.panel-body,
 .panel-footer {
+    padding: 5px 10px;
+}
+
+.panel-body {
     padding: 10px;
 }
 
-/* end modal */
+/* end panel */
+
+/* begin list-group */
+
+.list-group-item {
+    padding: 5px 10px;
+}
+
+/* end list-group */
 
 /* begin grid */
 
@@ -125,6 +147,14 @@ label {
 
 /* end form-control */
 
+/* begin progress */
+
+.progress {
+    margin-bottom: 10px;
+}
+
+/* end progress */
+
 /* begin dropdown-menu */
 
 .dropdown-menu {
@@ -186,12 +216,16 @@ label {
     position: relative;
 }
 
-.position-absolute-zero {
+.position-absolute-0 {
     position: absolute;
     top: 0;
     left: 0;
     bottom: 0;
     right: 0;
+}
+
+.margin-bottom-0 {
+    margin-bottom: 0;
 }
 
 /* end custom */
