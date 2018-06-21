@@ -94,6 +94,43 @@ label {
 
 /* end grid */
 
+/* begin button */
+
+.btn {
+    font-size: 13px;
+}
+
+.btn-sm, .btn-xs {
+    font-size: 12px;
+}
+
+.btn-group > .dropdown-menu > li > a {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+/* end button */
+
+/* begin dropdown-menu */
+
+.dropdown-menu {
+    font-size: 13px;
+    min-width: 100px;
+}
+
+/* end dropdown-menu */
+
+/* begin checkbox */
+
+.form-horizontal .checkbox,
+.form-horizontal .checkbox-inline,
+.form-horizontal .radio,
+.form-horizontal .radio-inline {
+    padding-top: 4px;
+}
+
+/* end checkbox */
+
 /* begin custom */
 
 .full-width {
