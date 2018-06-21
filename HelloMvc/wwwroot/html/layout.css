@@ -106,13 +106,8 @@ label {
 
 /* begin button */
 
-.btn {
+.btn:not(.btn-lg):not(.btn-sm):not(.btn-xs) {
     font-size: 13px;
-}
-
-.btn-sm,
-.btn-xs {
-    font-size: 12px;
 }
 
 .btn-group>.dropdown-menu>li>a {
@@ -121,6 +116,14 @@ label {
 }
 
 /* end button */
+
+/* begin form-control */
+
+.form-control {
+    height: 32px;
+}
+
+/* end form-control */
 
 /* begin dropdown-menu */
 
@@ -153,6 +156,10 @@ label {
 
 .nav-tabs {
     border-bottom: none;
+}
+
+.nav.nav-tabs>li.disabled {
+    pointer-events: none;
 }
 
 .nav.nav-tabs>li>a {

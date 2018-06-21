@@ -749,14 +749,7 @@
             });
 
             $("#btn-tab-menu2").click(function () {
-                // Select tab by name
-                if ($(".nav-tabs a[href='#menu3']").parent().hasClass("disabled")) {
-                    $(".nav-tabs a[href='#menu3']").attr("data-toggle", "tab")
-                        .parent().removeClass("disabled");
-                } else {
-                    $(".nav-tabs a[href='#menu3']").removeAttr("data-toggle")
-                        .parent().addClass("disabled");
-                }
+                $(".nav-tabs a[href='#menu3']").parent().toggleClass("disabled");
             });
         });
         // end Bootstrap Tab
