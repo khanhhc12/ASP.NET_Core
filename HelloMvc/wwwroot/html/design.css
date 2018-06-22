@@ -69,16 +69,35 @@
     box-sizing: border-box;
 }
 
+.k-autocomplete,
+.k-colorpicker,
+.k-combobox,
+.k-datepicker,
+.k-datetimepicker,
+.k-dropdown,
+.k-listbox,
+.k-numerictextbox,
+.k-selectbox,
+.k-textbox,
+.k-timepicker,
+.k-toolbar .k-split-button {
+    width: 100%;
+}
+
 textarea.k-textbox {
     padding-left: .571em;
 }
 
 .k-checkbox-label {
-	font-weight: initial;
-	margin-bottom: initial;
+    font-weight: initial;
+    margin-bottom: initial;
+}
+
+.k-label>[type="checkbox"] {
+    margin-right: 5px;
 }
 
 .k-filter-menu label {
-	font-weight: initial;
-	margin-bottom: initial;
+    font-weight: initial;
+    margin-bottom: initial;
 }
