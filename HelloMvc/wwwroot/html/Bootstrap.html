@@ -11,13 +11,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.35.4/css/bootstrap-dialog.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css" />
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.35.4/js/bootstrap-dialog.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-filestyle/2.1.0/bootstrap-filestyle.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.12.13/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -302,6 +303,18 @@
                                     <input type="file" id="excelfile" class="filestyle" data-btnClass="btn-sm btn-default" data-text="Read file">
                                 </div>
                                 <div class="div-pre"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- highlight.js -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#accordion1" href="#collapseL6">highlight.js</a>
+                        </div>
+                        <div id="collapseL6" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <pre class="margin-bottom-0"><code class="json">[{"title":"apples","count":[12000,20000],"description":{"text":"..."}}]</code></pre>
                             </div>
                         </div>
                     </div>
@@ -751,6 +764,14 @@
             });
         });
         // end Bootstrap Tab
+
+        // begin highlight.js
+        $(function () {
+            $("pre code").each(function (i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+        // end highlight.js
     </script>
 </body>
 
