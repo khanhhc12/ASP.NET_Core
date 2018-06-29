@@ -120,6 +120,36 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Kendo Grid Loading -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapseL4">Kendo Grid Loading</a>
+                        </div>
+                        <div id="collapseL4" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul id="nav-tab-grid-loading" class="nav nav-tabs">
+                                    <li class="active">
+                                        <a data-toggle="tab" href="#menu1">Menu 1</a>
+                                    </li>
+                                    <li class="disabled">
+                                        <a data-toggle="tab" href="#menu2">Menu 2</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div id="menu1" class="tab-pane fade in active">
+                                        <input type="button" id="btn-grid-loading" class="btn btn-sm btn-default" value="Load">
+                                    </div>
+                                    <div id="menu2" class="tab-pane fade">
+                                        <div class="grid-loading" style="display: none;">
+                                            <div class="k-loading-image"></div>
+                                        </div>
+                                        <div id="grid-loading" class="grid-item"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-6">
@@ -568,6 +598,90 @@
             });
         }
         // end FileSaver
+
+        // begin Kendo Grid Loading
+        $(function () {
+            $("#btn-grid-loading").click(function () {
+                loadGridLoading();
+            });
+        });
+
+        function gridDataBound(e) {
+            var grid = e.sender;
+            // show hide
+            grid.wrapper.show().prevAll(".grid-loading").hide();
+            // max-height
+            /*
+            setTimeout(function () {
+                var max_height = $(window).height() - grid.content.offset().top - grid.pager.element.height() - 30;
+                grid.content.css("max-height", max_height + "px");
+            }, 100);
+            */
+            // norecords
+            if (grid.dataSource.total() === 0) {
+                if (grid.content.find(".k-grid-norecords").length)
+                    grid.content.find(".k-grid-norecords").show();
+                else
+                    grid.content.append("<div class='k-grid-norecords'>Không có dữ liệu</div>");
+            } else {
+                grid.content.find(".k-grid-norecords").hide();
+            }
+            // btnLoading
+            if (grid.options.btnLoading) grid.options.btnLoading.button("reset");
+        }
+
+        function loadGridLoading(filter) {
+            var $btnLoading = $("#btn-grid-loading").button("loading");
+
+            // default value
+            if (typeof filter === "undefined") {
+                var filter = {
+                    Text: "#"
+                }
+            }
+
+            // show tab
+            $("#nav-tab-grid-loading li:eq(1)").removeClass("disabled").find("a").tab("show");
+            // hide grid show loading
+            $("#grid-loading").prevAll(".grid-loading").show().nextAll(".grid-item").hide();
+            setTimeout(function () {
+                var grid = $("#grid-loading").empty().kendoGrid({
+                    btnLoading: $btnLoading,
+                    dataSource: [{
+                        Value: 1,
+                        Text: filter.Text + " One"
+                    }, {
+                        Value: 2,
+                        Text: filter.Text + " Two"
+                    }, {
+                        Value: 3,
+                        Text: filter.Text + " Three"
+                    }],
+                    pageable: {
+                        pageSize: 10
+                    },
+                    dataBound: gridDataBound,
+                    dataBinding: function (e) {
+                        record = (this.dataSource.page() - 1) * this.dataSource.pageSize();
+                    },
+                    columns: [{
+                        title: "",
+                        width: "50px",
+                        attributes: {
+                            "class": "text-center"
+                        },
+                        template: "#= ++record #"
+                    }, {
+                        field: "Value",
+                        title: "Value"
+                    }, {
+                        field: "Text",
+                        title: "Text"
+                    }]
+                }).data("kendoGrid");
+            }, 5000);
+        }
+        // end Kendo Grid Loading
     </script>
 </body>
 
