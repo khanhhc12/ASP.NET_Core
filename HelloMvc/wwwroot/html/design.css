@@ -101,3 +101,8 @@ textarea.k-textbox {
     font-weight: initial;
     margin-bottom: initial;
 }
+
+.grid-loading {
+    position: relative;
+    height: 100px;
+}
