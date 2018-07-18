@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Rowspan</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>col1</th>
+                    <th>col2</th>
+                    <th>col3</th>
+                    <th>col4</th>
+                    <th>col5</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>4</td>
+                    <td>2</td>
+                </tr>
+                <tr class="rs-skip">
+                    <td>footer</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        $(function () {
+            //dynamicRowSpan($("table"), 1, 5);
+            dynamicRowSpan($("table"), 1, 0, [1, 2, 3, 5]);
+        });
+        /*
+            $table: jquery of table, ex: $("table")
+            colIndex: fix column, 1..n
+            -- all table
+            colNumber: column number, ex: 4
+            -- or columns
+            colArray: 1..n, ex: [1,2,4]
+            
+            dynamicRowSpan($("table"), 1, 4);
+            dynamicRowSpan($("table"), 1, 0, [1,2,4]);
+        */
+        function dynamicRowSpan($table, colIndex, colNumber, colArray) {
+            var rowIndex = 0,
+                celValue = null,
+                celParentIndex = null,
+                rowSpanNumber = 1;
+            // loop index col
+            $table.find("tr:not(.rs-skip) > td:nth-child(" + colIndex + ")").each(function () {
+                var $td = $(this);
+                // same value
+                if ($td.text() === celValue) {
+                    rowSpanNumber++;
+                    // set td id and group id
+                    $td.attr("data-rs-id", rowIndex).closest("tr").attr("data-rs-id", rowIndex);
+                    // set rowspan for first td
+                    $table.find("td[data-rs-id=" + rowIndex + "]:eq(0)").attr("data-rs-number", rowSpanNumber);
+                    // set remove for other td
+                    $table.find("td[data-rs-id=" + rowIndex + "]:not(:eq(0))").addClass("rs-remove");
+                } else {
+                    // different value
+                    rowIndex++;
+                    celValue = $td.text();
+                    rowSpanNumber = 1;
+                    // set td id
+                    $td.attr("data-rs-id", rowIndex).closest("tr").attr("data-rs-id", rowIndex);
+                }
+            });
+            if (typeof colArray === "undefined") {
+                var colArray = [];
+                for (var i = 1; i <= colNumber; i++) {
+                    if (i !== colIndex) {
+                        colArray.push(i);
+                    }
+                }
+            }
+            // loop other col
+            $.each(colArray, function (index, value) {
+                celValue = null;
+                rowSpanNumber = 1;
+                $table.find("tr:not(.rs-skip) > td:nth-child(" + value + ")").each(function () {
+                    var $td = $(this);
+                    var $tr = $td.closest("tr");
+                    // same value and same group
+                    if ($tr.attr("data-rs-id") === celParentIndex && $td.text() === celValue) {
+                        rowSpanNumber++;
+                        // set td id
+                        $td.attr("data-rs-id", rowIndex);
+                        // set rowspan for first td
+                        $table.find("td[data-rs-id=" + rowIndex + "]:eq(0)").attr("data-rs-number",
+                            rowSpanNumber);
+                        // set remove for other td
+                        $table.find("td[data-rs-id=" + rowIndex + "]:not(:eq(0))").addClass("rs-remove");
+                    } else {
+                        // different value
+                        rowIndex++;
+                        celValue = $td.text();
+                        // get group id
+                        celParentIndex = $td.closest("tr").attr("data-rs-id");
+                        rowSpanNumber = 1;
+                        // set td id
+                        $td.attr("data-rs-id", rowIndex);
+                    }
+                });
+            });
+            // set rowspan
+            $table.find("[data-rs-number]").each(function () {
+                var $td = $(this);
+                $td.attr("rowspan", $td.attr("data-rs-number")).removeAttr("data-rs-number");
+            });
+            // remove td
+            $table.find(".rs-remove").remove();
+        }
+    </script>
+</body>
+
+</html>
