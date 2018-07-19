@@ -2,10 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HelloNLog.Controllers
 {
-    public class SimpleController : Controller
+    [ApiController]
+    public class SimpleController : ControllerBase
     {
         [Route("api/simple/post")]
-        public object Post([FromBody] SimpleModel model)
+        public object Post(SimpleModel model)
         {
             return model;
         }
