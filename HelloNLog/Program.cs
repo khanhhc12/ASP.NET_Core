@@ -16,15 +16,13 @@ namespace HelloNLog
         public static void Main(string[] args)
         {
             //ConfigureNLog
-            NLog.Web.NLogBuilder.ConfigureNLog("nlog.config");
-            BuildWebHost(args).Run();
+            NLogBuilder.ConfigureNLog("nlog.config");
+            CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                //UseNLog
-                .UseNLog()
-                .Build();
+                .UseNLog();  // NLog: setup NLog for Dependency injection
     }
 }
