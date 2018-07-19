@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using HelloSwaggerUI.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.PlatformAbstractions;
-using HelloSwaggerUI.Models;
 
 namespace HelloSwaggerUI
 {
@@ -26,7 +27,8 @@ namespace HelloSwaggerUI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
             // AddSwaggerGen
             services.AddSwaggerGen(c =>
             {
@@ -35,7 +37,7 @@ namespace HelloSwaggerUI
                 //c.TagActionsBy(api => api.HttpMethod);
                 // OrderActionsBy
                 //c.OrderActionsBy(api => api.RelativePath);
-                var dirPath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "xml");
+                var dirPath = Path.Combine(AppContext.BaseDirectory, "xml");
                 if (Directory.Exists(dirPath))
                 {
                     var dir = new DirectoryInfo(dirPath);
@@ -53,8 +55,14 @@ namespace HelloSwaggerUI
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
 
+            app.UseHttpsRedirection();
             app.UseMvc();
+
             //UseSwaggerAuthorized
             app.UseSwaggerAuthorized();
             //UseSwagger

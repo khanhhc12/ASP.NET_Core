@@ -8,20 +8,21 @@ using Newtonsoft.Json.Linq;
 namespace HelloSwaggerUI.Controllers
 {
     [Route("api/[controller]/[action]")]
-    public class SimpleController : Controller
+    [ApiController]
+    public class SimpleController : ControllerBase
     {
         /// <summary>
         /// Simple summary
         /// </summary>
         /// <remarks>Simple remarks</remarks>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult<IEnumerable<string>> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
         [HttpGet]
-        public List<SimpleModel> ParseNoJsonProperty()
+        public ActionResult<List<SimpleModel>> ParseNoJsonProperty()
         {
             var listObj = new List<object>();
             for (int i = 1; i < 11; i++)
