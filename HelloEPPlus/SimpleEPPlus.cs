@@ -46,6 +46,22 @@ namespace HelloEPPlus
             }
         }
 
+        public static void WriteExcel()
+        {
+            var excelFile = new FileInfo(Path.Combine(Directory.GetCurrentDirectory(), "xlsx\\sample2.xlsx"));
+            var list = new[] { new { col1 = 1, col2 = "A" }, new { col1 = 2, col2 = "B" }, new { col1 = 3, col2 = "C" } };
+            //Creates a blank workbook. Use the using statment, so the package is disposed when we are done.
+            using (var p = new ExcelPackage())
+            {
+                //A workbook must have at least on cell, so lets add one... 
+                var ws = p.Workbook.Worksheets.Add("MySheet");
+                //To set values in the spreadsheet use the Cells indexer.
+                ws.Cells["A1"].LoadFromCollection(list, true);
+                //Save the new workbook. We haven't specified the filename so use the Save as method.
+                p.SaveAs(excelFile);
+            }
+        }
+
         private static T DictionaryToObject<T>(IDictionary<string, object> dict) where T : new()
         {
             var t = new T();
