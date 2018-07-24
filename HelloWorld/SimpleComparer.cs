@@ -13,13 +13,13 @@ namespace HelloWorld
             {
                 new SimpleModel { id=1, name ="A" },
                 new SimpleModel { id=2, name ="B" },
-                new SimpleModel { id=3, name ="C" },
+                new SimpleModel { id=3, name ="C" }
             };
             var list2 = new List<SimpleModel>
             {
                 new SimpleModel { id=1, name ="A" },
                 new SimpleModel { id=3, name ="C" },
-                new SimpleModel { id=4, name ="D" },
+                new SimpleModel { id=4, name ="D" }
             };
             var list = list1.Intersect(list2, new SimpleModelComparer());
             Console.WriteLine(JsonConvert.SerializeObject(list));
