@@ -6,6 +6,8 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Reflection;
+using OfficeOpenXml.Style;
+using System.Drawing;
 
 namespace HelloEPPlus
 {
@@ -46,18 +48,66 @@ namespace HelloEPPlus
             }
         }
 
+        public static void ReadExcelManual()
+        {
+            var excelFile = new FileInfo(Path.Combine(Directory.GetCurrentDirectory(), "xlsx\\sample.xlsx"));
+            using (var package = new ExcelPackage(excelFile))
+            {
+                var list = new List<SimpleModel>();
+                var sheet = package.Workbook.Worksheets[1];
+                // Fetch the WorkSheet size
+                ExcelCellAddress startCell = sheet.Dimension.Start;
+                ExcelCellAddress endCell = sheet.Dimension.End;
+                // cells
+                for (int row = startCell.Row + 1; row <= endCell.Row; row++)
+                {
+                    var item = new SimpleModel();
+                    item.col1 = Convert.ToInt32(sheet.Cells[row, 1].Value);
+                    item.col2 = sheet.Cells[row, 2].Text;
+                    item.col3 = sheet.Cells[row, 3].Text;
+                    list.Add(item);
+                }
+                Console.WriteLine(JsonConvert.SerializeObject(new { cells = list }, Formatting.Indented));
+            }
+        }
+
         public static void WriteExcel()
         {
             var excelFile = new FileInfo(Path.Combine(Directory.GetCurrentDirectory(), "xlsx\\sample2.xlsx"));
-            var list = new[] { new { col1 = 1, col2 = "A" }, new { col1 = 2, col2 = "B" }, new { col1 = 3, col2 = "C" } };
-            //Creates a blank workbook. Use the using statment, so the package is disposed when we are done.
+            var list = new[]
+            {
+                new { col1 = 1, col2 = "ABC" },
+                new { col1 = 2, col2 = "DEF" },
+                new { col1 = 3, col2 = "XYZ" }
+            };
+            // Creates a blank workbook. Use the using statment, so the package is disposed when we are done.
             using (var p = new ExcelPackage())
             {
-                //A workbook must have at least on cell, so lets add one... 
+                // A workbook must have at least on cell, so lets add one... 
                 var ws = p.Workbook.Worksheets.Add("MySheet");
-                //To set values in the spreadsheet use the Cells indexer.
+                // To set values in the spreadsheet use the Cells indexer.
                 ws.Cells["A1"].LoadFromCollection(list, true);
-                //Save the new workbook. We haven't specified the filename so use the Save as method.
+                // Style
+                using (var range = ws.Cells[1, 1, 1, ws.Dimension.End.Column])
+                {
+                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    range.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(92, 184, 92));
+                    range.Style.Font.Color.SetColor(Color.White);
+                }
+                using (var range = ws.Cells[ws.Dimension.Start.Row, ws.Dimension.Start.Column, ws.Dimension.End.Row, ws.Dimension.End.Column])
+                {
+                    range.Style.Border.Top.Style = ExcelBorderStyle.Hair;
+                    range.Style.Border.Right.Style = ExcelBorderStyle.Hair;
+                    range.Style.Border.Bottom.Style = ExcelBorderStyle.Hair;
+                    range.Style.Border.Left.Style = ExcelBorderStyle.Hair;
+                }
+                using (var range = ws.Cells[1, 2, ws.Dimension.End.Row, 2])
+                    foreach (var cell in range)
+                        if (cell.Text == "ABC")
+                            cell.Style.Font.Bold = true;
+                // Autofit columns for all cells
+                ws.Cells.AutoFitColumns(0);
+                // Save the new workbook. We haven't specified the filename so use the Save as method.
                 p.SaveAs(excelFile);
             }
         }

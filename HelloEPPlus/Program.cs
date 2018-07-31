@@ -8,6 +8,7 @@ namespace HelloEPPlus
         {
             Console.WriteLine("Hello World!");
             SimpleEPPlus.ReadExcel();
+            SimpleEPPlus.ReadExcelManual();
             SimpleEPPlus.WriteExcel();
         }
     }
