@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace HelloWorld
 {
@@ -27,6 +30,16 @@ namespace HelloWorld
         {
             Thread.Sleep(input);
             return input;
+        }
+
+        public static void Test2()
+        {
+            var list = new List<int>();
+            for (int i = 1; i <= 1000; i++)
+                list.Add(i);
+            var sList = SimpleConvert.SplitList<int>(list, 50);
+            var nList = sList.AsParallel().SelectMany(l => l.Select(i => i.ToString())).ToList();
+            Console.WriteLine(JsonConvert.SerializeObject(nList));
         }
     }
 }
