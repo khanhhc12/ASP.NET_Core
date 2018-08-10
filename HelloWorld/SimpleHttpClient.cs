@@ -9,14 +9,15 @@ namespace HelloWorld
 {
     public static class SimpleHttpClient
     {
-        // string resJson = SimpleHttpClient.GetAsync("http://localhost:5000/api/todo").Result;
+        // string resJson = Task.Run(() => SimpleHttpClient.GetAsync("http://localhost:5000/api/todo")).Result;
         public static async Task<string> GetAsync(string uri)
         {
             try
             {
                 using (var httpClient = new HttpClient())
                 // deadlock ConfigureAwait(false)
-                using (var response = await httpClient.GetAsync(uri).ConfigureAwait(false))
+                // or Task.Run(() => {})
+                using (var response = await httpClient.GetAsync(uri))
                 {
                     // will throw an exception if not successful
                     response.EnsureSuccessStatusCode();
@@ -46,7 +47,8 @@ namespace HelloWorld
                 var content = new StringContent(data == null ? string.Empty : data, Encoding.UTF8, contentType);
                 using (var httpClient = new HttpClient())
                 // deadlock ConfigureAwait(false)
-                using (var response = await httpClient.PostAsync(uri, content).ConfigureAwait(false))
+                // or Task.Run(() => {})
+                using (var response = await httpClient.PostAsync(uri, content))
                 {
                     response.EnsureSuccessStatusCode();
                     return await response.Content.ReadAsStringAsync();
@@ -80,7 +82,8 @@ namespace HelloWorld
                     foreach (var cookie in cookies)
                         cookieContainer.Add(baseAddress, cookie);
                     // deadlock ConfigureAwait(false)
-                    using (var response = await client.GetAsync(action).ConfigureAwait(false))
+                    // or Task.Run(() => {})
+                    using (var response = await client.GetAsync(action))
                     {
                         // will throw an exception if not successful
                         response.EnsureSuccessStatusCode();
@@ -117,7 +120,8 @@ namespace HelloWorld
                     foreach (var cookie in cookies)
                         cookieContainer.Add(baseAddress, cookie);
                     // deadlock ConfigureAwait(false)
-                    using (var response = await client.PostAsync(action, content).ConfigureAwait(false))
+                    // or Task.Run(() => {})
+                    using (var response = await client.PostAsync(action, content))
                     {
                         // will throw an exception if not successful
                         response.EnsureSuccessStatusCode();
