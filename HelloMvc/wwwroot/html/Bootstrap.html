@@ -319,6 +319,18 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- jQuery.when() -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#accordion1" href="#collapseL7">jQuery.when()</a>
+                        </div>
+                        <div id="collapseL7" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <input type="button" id="btn-when" class="btn btn-default btn-sm" value="Run">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-6">
@@ -823,6 +835,46 @@
             });
         });
         // end HTML5 File API
+
+        // begin jQuery.when()
+        $(function () {
+            $("#btn-when").click(function () {
+                var $btn = $(this);
+                $btn.val("Run");
+                d1 = $.Deferred();
+                d2 = $.Deferred();
+                $.when(d1, d2).done(function (v1, v2) {
+                    setTimeout(function () {
+                        $btn.val($btn.val() + " > " + v1.name + " + " + v2.name);
+                    }, 1000);
+                });
+                function1();
+                function2();
+            });
+        });
+
+        var d1, d2;
+
+        function function1() {
+            setTimeout(function () {
+                $("#btn-when").val($("#btn-when").val() + " > F1");
+                if (typeof d1 === "object" && d1.hasOwnProperty("resolve"))
+                    d1.resolve({
+                        name: "F1"
+                    });
+            }, 2000);
+        }
+
+        function function2() {
+            setTimeout(function () {
+                $("#btn-when").val($("#btn-when").val() + " > F2");
+                if (typeof d2 === "object" && d2.hasOwnProperty("resolve"))
+                    d2.resolve({
+                        name: "F2"
+                    });
+            }, 1000);
+        }
+        // end jQuery.when()
     </script>
 </body>
 
