@@ -7,10 +7,15 @@ using Newtonsoft.Json.Linq;
 
 namespace HelloMvc.Controllers
 {
-    public class SimpleController : Controller
+    public class StreamController : Controller
     {
-        // JsonStreamingResult
-        public void Index()
+        public IActionResult Index()
+        {
+            return View();
+        } 
+        
+        [HttpGet]
+        public void Test()
         {
             var itemToSerialize = new List<Guid>();
             for (int i = 0; i < 100000; i++)
