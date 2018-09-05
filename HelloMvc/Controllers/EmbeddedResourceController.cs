@@ -8,9 +8,22 @@ namespace HelloMvc.Controllers
     {
         // /css/site.css/
         // /js/site.js/
-        [Route("{folder1}/{fileName}")]
-        [Route("{folder1}/{folder2}/{fileName}")]
-        public ContentResult Read(string folder1, string folder2, string fileName)
+
+        [Route("css/{fileName}")]
+        [Route("css/{folder2}/{fileName}")]
+        public ContentResult ReadCss(string folder2, string fileName)
+        {
+            return Read("css", folder2, fileName);
+        }
+
+        [Route("js/{fileName}")]
+        [Route("js/{folder2}/{fileName}")]
+        public ContentResult ReadJs(string folder2, string fileName)
+        {
+            return Read("js", folder2, fileName);
+        }
+
+        private ContentResult Read(string folder1, string folder2, string fileName)
         {
             string file = "";
             var assembly = Assembly.GetExecutingAssembly();
