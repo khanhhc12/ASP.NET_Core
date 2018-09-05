@@ -1,0 +1,32 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+@section Scripts {
+<script>
+$(function() {
+    var last_response_len = false;
+    $.ajax({
+        url: "/Stream/Test",
+        xhrFields: {
+            onprogress: function(e) {
+                var this_response, response = e.currentTarget.response;
+                if (last_response_len === false) {
+                    this_response = response;
+                    last_response_len = response.length;
+                } else {
+                    this_response = response.substring(last_response_len);
+                    last_response_len = response.length;
+                }
+                console.log(this_response);
+            }
+        },
+        success: function(rs) {
+            console.log(rs);
+        },
+        error: function(xhr) {
+            console.log(xhr);
+        }
+    });
+});
+</script>
+}
