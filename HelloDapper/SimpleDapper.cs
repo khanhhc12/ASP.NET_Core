@@ -52,7 +52,6 @@ namespace HelloDapper
         {
             using (var connection = new SqliteConnection(connectionString))
             {
-                connection.Open();
                 return connection.Query(sql, param, commandType: commandType, commandTimeout: 300);
             }
         }
@@ -61,7 +60,6 @@ namespace HelloDapper
         {
             using (var connection = new SqliteConnection(connectionString))
             {
-                connection.Open();
                 return connection.Query<T>(sql, param, commandType: commandType, commandTimeout: 300);
             }
         }
@@ -70,7 +68,6 @@ namespace HelloDapper
         {
             using (var connection = new SqliteConnection(connectionString))
             {
-                connection.Open();
                 return connection.QueryFirstOrDefault<T>(sql, param, commandType: commandType, commandTimeout: 300);
             }
         }
@@ -79,7 +76,6 @@ namespace HelloDapper
         {
             using (var connection = new SqliteConnection(connectionString))
             {
-                connection.Open();
                 return connection.Execute(sql, param, commandType: commandType);
             }
         }
