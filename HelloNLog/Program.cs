@@ -15,8 +15,6 @@ namespace HelloNLog
     {
         public static void Main(string[] args)
         {
-            //ConfigureNLog
-            NLogBuilder.ConfigureNLog("nlog.config");
             CreateWebHostBuilder(args).Build().Run();
         }
 
