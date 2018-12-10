@@ -16,7 +16,7 @@
 
   <!--CopyToOutputDirectory-->
   <ItemGroup>
-    <Content Update="nlog.config" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="nlog.config" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>
