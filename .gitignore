@@ -1,4 +1,5 @@
 .nuget
 bin
 obj
+node_modules
 document
