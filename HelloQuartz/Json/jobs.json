@@ -1,0 +1,36 @@
+[{
+    "Name": "Job1",
+    "IsEnabled": true,
+    "IntervalSchedule": {
+        "Minutes": 1
+    }
+}, {
+    "Name": "Job2",
+    "IsEnabled": true,
+    "IntervalSchedule": {
+        "Minutes": 2
+    },
+    "StartAt": {
+        "Minute": 5
+    }
+}, {
+    "Name": "Job3",
+    "IsEnabled": true,
+    "IntervalSchedule": {
+        "Minutes": 3
+    },
+    "StartAt": {
+        "Hour": 12,
+        "Minute": 1
+    }
+}, {
+    "Name": "Job4",
+    "IsEnabled": true,
+    "IntervalSchedule": {
+        "Minutes": 3
+    },
+    "StartAt": {
+        "Month": 1,
+        "Day": 1
+    }
+}]
