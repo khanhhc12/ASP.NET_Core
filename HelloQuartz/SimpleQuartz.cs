@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ namespace HelloQuartz
     {
         // First we must get a reference to a scheduler
         ISchedulerFactory sf = new StdSchedulerFactory();
+        List<JobModel> listJob = new List<JobModel>();
         string dirJson = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Json");
 
         public async Task Run()
@@ -45,11 +47,11 @@ namespace HelloQuartz
                 JobKey jobKey = new JobKey($"job{item.Name}", $"group{item.Name}");
                 if (item.IsEnabled)
                 {
-                    if (await sched.CheckExists(jobKey)) return;
+                    if (await sched.CheckExists(jobKey)) continue;
 
-                    if (item.IntervalSchedule == null) return;
+                    if (item.IntervalSchedule == null) continue;
                     if (item.IntervalSchedule.Months == 0 && item.IntervalSchedule.Days == 0
-                        && item.IntervalSchedule.Hours == 0 && item.IntervalSchedule.Minutes == 0) return;
+                        && item.IntervalSchedule.Hours == 0 && item.IntervalSchedule.Minutes == 0) continue;
 
                     // computer a time that is on the next round minute
                     DateTimeOffset runTime = DateBuilder.EvenMinuteDate(DateTimeOffset.Now);
@@ -83,12 +85,33 @@ namespace HelloQuartz
 
                     // Tell quartz to schedule the job using our trigger
                     if (!await sched.CheckExists(job.Key))
+                    {
                         await sched.ScheduleJob(job, trigger);
+                        listJob.Add(item);
+                        Console.WriteLine($"{DateTime.Now} Add {item.Name}");
+                    }
                 }
                 else
                 {
+                    // DeleteJob
                     if (await sched.CheckExists(jobKey))
+                    {
                         await sched.DeleteJob(jobKey);
+                        listJob.RemoveAll(x => x.Name == item.Name);
+                        Console.WriteLine($"{DateTime.Now} Remove {item.Name}");
+                    }
+                }
+            }
+
+            // DeleteJob
+            foreach (var item in listJob.Select(x => x.Name).Except(list.Select(x => x.Name)).ToList())
+            {
+                JobKey jobKey = new JobKey($"job{item}", $"group{item}");
+                if (await sched.CheckExists(jobKey))
+                {
+                    await sched.DeleteJob(jobKey);
+                    listJob.RemoveAll(x => x.Name == item);
+                    Console.WriteLine($"{DateTime.Now} Remove {item}");
                 }
             }
 
