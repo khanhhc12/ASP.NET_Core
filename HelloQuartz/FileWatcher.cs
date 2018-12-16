@@ -3,19 +3,14 @@ using System.IO;
 
 namespace HelloQuartz
 {
-    public static class FileWatcher
+    public class FileWatcher
     {
-        public static bool IsChanged = false;
-        public static bool IsNotified = false;
+        SimpleQuartz simpleQuartz = new SimpleQuartz();
 
-        public static void CreateFileWatcher(string path)
+        public void CreateFileWatcher(string path)
         {
             try
             {
-                if (IsNotified) return;
-                IsChanged = true;
-                IsNotified = true;
-
                 // Create a new FileSystemWatcher and set its properties.
                 FileSystemWatcher watcher = new FileSystemWatcher();
                 watcher.Path = path;
@@ -34,6 +29,8 @@ namespace HelloQuartz
 
                 // Begin watching.
                 watcher.EnableRaisingEvents = true;
+
+                var task = simpleQuartz.Run();
             }
             catch (Exception ex)
             {
@@ -42,18 +39,18 @@ namespace HelloQuartz
         }
 
         // Define the event handlers.
-        private static void OnChanged(object source, FileSystemEventArgs e)
+        private void OnChanged(object source, FileSystemEventArgs e)
         {
             // Specify what is done when a file is changed, created, or deleted.
             Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
-            IsChanged = true;
+            var task = simpleQuartz.Run();
         }
 
-        private static void OnRenamed(object source, RenamedEventArgs e)
+        private void OnRenamed(object source, RenamedEventArgs e)
         {
             // Specify what is done when a file is renamed.
             Console.WriteLine("File: {0} renamed to {1}", e.OldFullPath, e.FullPath);
-            IsChanged = true;
+            var task = simpleQuartz.Run();
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 
 namespace HelloQuartz
 {
@@ -6,8 +8,9 @@ namespace HelloQuartz
     {
         static void Main(string[] args)
         {
-            SimpleQuartz simpleQuartz = new SimpleQuartz();
-            simpleQuartz.Run();
+            string dirJson = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Json");
+            FileWatcher fileWatcher = new FileWatcher();
+            fileWatcher.CreateFileWatcher(dirJson);
             Console.WriteLine("Hello World!");
             Console.ReadLine();
         }
