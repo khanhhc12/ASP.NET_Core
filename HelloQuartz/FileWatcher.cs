@@ -11,6 +11,8 @@ namespace HelloQuartz
         {
             try
             {
+                simpleQuartz.Run().Wait();
+
                 // Create a new FileSystemWatcher and set its properties.
                 FileSystemWatcher watcher = new FileSystemWatcher();
                 watcher.Path = path;
@@ -29,8 +31,6 @@ namespace HelloQuartz
 
                 // Begin watching.
                 watcher.EnableRaisingEvents = true;
-
-                simpleQuartz.Run().Wait();
             }
             catch (Exception ex)
             {

@@ -17,16 +17,27 @@ namespace HelloQuartz
 
         public async Task Run()
         {
+            Console.WriteLine($"{DateTime.Now} Run");
+
             IScheduler sched = await sf.GetScheduler();
 
             string fileJson = Path.Combine(dirJson, "jobs.json");
             List<JobModel> list = new List<JobModel>();
             try
             {
-                if (File.Exists(fileJson))
-                    list = JsonConvert.DeserializeObject<List<JobModel>>(File.ReadAllText(fileJson));
+                //if (File.Exists(fileJson))
+                //    list = JsonConvert.DeserializeObject<List<JobModel>>(File.ReadAllText(fileJson));
+                using (var stream = File.Open(fileJson, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (StreamReader file = new StreamReader(stream))
+                {
+                    JsonSerializer serializer = new JsonSerializer();
+                    list = serializer.Deserialize(file, typeof(List<JobModel>)) as List<JobModel>;
+                }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
             if (list == null || list.Count == 0) return;
 
             foreach (var item in list)
