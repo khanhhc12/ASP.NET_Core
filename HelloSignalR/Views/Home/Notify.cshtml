@@ -21,5 +21,19 @@
             appendMessage(message)
         });
         connection.start();
+        async function start() {
+            try {
+                await connection.start();
+                appendMessage("connected");
+                console.log("connected");
+            } catch (err) {
+                appendMessage(err);
+                console.log(err);
+                setTimeout(() => start(), 5000);
+            }
+        };
+        connection.onclose(async () => {
+            await start();
+        });
     </script>
 }
