@@ -111,6 +111,18 @@ namespace HelloEPPlus
                 p.SaveAs(excelFile);
             }
         }
+        
+        private static DateTime? DateTimeExact(string value)
+        {
+            DateTime dateTime = new DateTime();
+            long dateNum = 0;
+            if (long.TryParse(value, out dateNum))
+                return DateTime.FromOADate(dateNum);
+            else if (DateTime.TryParse(value, out dateTime))
+                return dateTime;
+            else
+                return null;
+        }
 
         private static T DictionaryToObject<T>(IDictionary<string, object> dict) where T : new()
         {
