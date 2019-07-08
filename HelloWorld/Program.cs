@@ -7,7 +7,7 @@ namespace HelloWorld
     {
         static void Main(string[] args)
         {
-            //Task timeout
+            // Task timeout
             //SimpleTask.Test();
             //var i = SimpleConvert.To<int>("123");
             List<string> words = new List<string> { "A", "B", "C" };
