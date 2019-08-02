@@ -8,15 +8,16 @@
 
     <title>Bootstrap 4</title>
 
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-	<link rel="stylesheet" href="lib/bootstrap4-dialog/dist/css/bootstrap-dialog.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="lib/bootstrap4-dialog/dist/css/bootstrap-dialog.css">
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-	<script src="lib/bootstrap4-dialog/dist/js/bootstrap-dialog.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="lib/bootstrap4-dialog/dist/js/bootstrap-dialog.js"></script>
+    <script src="lib/zxing/dist/js/zxing.min.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -28,10 +29,153 @@
 </head>
 
 <body>
-	<div id="example" style="padding: 5px;">
-	    <button type="button" id="btnShowDialog" class="btn btn-outline-primary btn-sm">Show Dialog</button>
-	    <button type="button" id="btnShowConfirm" class="btn btn-outline-primary btn-sm">Show Confirm</button>
-	</div>
+    <div lass="container-fluid" style="padding: 20px;">
+        <div class="row">
+            <div class="col-sm">
+                <div id="accordion1">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne"
+                                    aria-expanded="true" aria-controls="collapseOne">
+                                    Collapsible Group Item #1
+                                </button>
+                            </h5>
+                        </div>
+
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                            data-parent="#accordion1">
+                            <div class="card-body">
+                                <button type="button" id="btnShowDialog" class="btn btn-outline-primary btn-sm">
+                                    Show Dialog
+                                </button>
+                                <button type="button" id="btnShowConfirm" class="btn btn-outline-primary btn-sm">
+                                    Show Confirm
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingTwo">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo"
+                                    aria-expanded="false" aria-controls="collapseTwo">
+                                    Collapsible Group Item #2
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion1">
+                            <div class="card-body">
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#menu1"
+                                            role="tab" aria-controls="menu1" aria-selected="true">Menu 1</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#menu2" role="tab"
+                                            aria-controls="menu2" aria-selected="false">Menu 2</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#menu3" role="tab"
+                                            aria-controls="menu3" aria-selected="false">Menu 3</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="myTabContent">
+                                    <div class="tab-pane fade show active" id="menu1" role="tabpanel"
+                                        aria-labelledby="menu1-tab">
+                                        ...</div>
+                                    <div class="tab-pane fade" id="menu2" role="tabpanel" aria-labelledby="menu2-tab">
+                                        ...
+                                    </div>
+                                    <div class="tab-pane fade" id="menu3" role="tabpanel" aria-labelledby="menu3-tab">
+                                        ...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingThree">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" data-toggle="collapse"
+                                    data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    Collapsible Group Item #3
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                            data-parent="#accordion1">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="txtScan2">Scan</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="txtScan2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button" id="btnScan">Scan</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="display: none">
+                                    <div id="scanner">
+                                        <div class="form-group">
+                                            <label for="txtScan">Scan</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="txtScan" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="selCamera">Camera</label>
+                                            <select class="form-control" id="selCamera">
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <video id="preview" style="width: 100%"></video>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div id="accordion2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-right1"
+                                    aria-expanded="true" aria-controls="collapse-right1">
+                                    Collapsible Group Item #1
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapse-right1" class="collapse show" data-parent="#accordion2">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="selCamera3">Camera</label>
+                                    <select class="form-control" id="selCamera3">
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="txtScan3">Scan</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="txtScan3">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button" id="btnScan3">Scan</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <video id="video" width="300" height="200" style="border: 1px solid gray"></video>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
     <script>
         // begin BootstrapDialog
         $(function () {
@@ -43,6 +187,102 @@
                 BootstrapDialog.confirm('Hi Apple, are you sure?');
             });
         });
+        // end BootstrapDialog
+
+        // begin Instascan
+        var scanner, cameras, dialog;
+        $(function () {
+            dialog = new BootstrapDialog({
+                message: $("#scanner"),
+                autodestroy: false,
+                onshown: function (dialogRef) {
+                    dialogRef.getModalBody().find("#txtScan").val("");
+                    if (!(scanner && cameras)) {
+                        scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+                        scanner.addListener("scan", function (content) {
+                            dialog.getModalBody().find("#txtScan").val(content);
+                        });
+                        Instascan.Camera.getCameras().then(function (_cameras) {
+                            cameras = _cameras;
+                            if (cameras.length > 0) {
+                                scanner.start(cameras[0]);
+                                var $selCamera = dialogRef.getModalBody().find("#selCamera").empty();
+                                for (var i = 0; i < cameras.length; i++)
+                                    $selCamera.append($("<option>", { value: i, text: `Camera ${i + 1}` }));
+                                $selCamera.change(function () {
+                                    if (scanner && cameras)
+                                        scanner.start(cameras[parseInt($(this).val())]);
+                                });
+                            } else {
+                                console.error('No cameras found.');
+                            }
+                        }).catch(function (e) {
+                            console.error(e);
+                        });
+                    }
+                },
+                buttons: [{
+                    label: "Close",
+                    action: function (dialogRef) {
+                        dialogRef.close();
+                    }
+                }, {
+                    label: "OK",
+                    action: function (dialogRef) {
+                        $("#txtScan2").val($.trim(dialogRef.getModalBody().find("#txtScan").val()));
+                        dialogRef.close();
+                    }
+                }]
+            });
+            dialog.realize();
+
+            $("#btnScan").click(function () {
+                $("#txtScan2").val("");
+                dialog.open();
+            });
+
+            $("#btnScan3").click(function () {
+                try {
+                /*const*/codeReader = new ZXing.BrowserQRCodeReader();
+                    codeReader
+                        .listVideoInputDevices()
+                        .then(videoInputDevices => {
+                            var $selCamera = $("#selCamera3").empty();
+                            videoInputDevices.forEach(device =>
+                                $selCamera.append($("<option>", { value: device.deviceId, text: device.label }))
+                            );
+                            $selCamera.change(function () {
+                                $("#txtScan3").val("");
+                                codeReader.reset();
+                                codeReader
+                                    .decodeFromInputVideoDeviceContinuously($(this).val(), "video", result => {
+                                        if (result)
+                                            $("#txtScan3").val(result.text);
+                                        else
+                                            $("#txtScan3").val("");
+                                    })
+                                    .catch(err => console.error(err));
+                            });
+                            const firstDeviceId = videoInputDevices[0].deviceId;
+                            $("#txtScan3").val("");
+                            codeReader.reset();
+                            codeReader
+                                .decodeFromInputVideoDeviceContinuously(firstDeviceId, "video", result => {
+                                    if (result)
+                                        $("#txtScan3").val(result.text);
+                                    else
+                                        $("#txtScan3").val("");
+                                })
+                                .catch(err => console.error(err));
+                        })
+                        .catch(err => console.error(err));
+                }
+                catch (err) {
+                    console.error(err);
+                }
+            });
+        });
+        // end Instascan
     </script>
 </body>
 
