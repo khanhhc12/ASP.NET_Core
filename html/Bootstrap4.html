@@ -106,6 +106,24 @@
                         <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
                             data-parent="#accordion1">
                             <div class="card-body">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div id="accordion2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-right1"
+                                    aria-expanded="true" aria-controls="collapse-right1">
+                                    Collapsible Group Item #1
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapse-right1" class="collapse show" data-parent="#accordion2">
+                            <div class="card-body">
                                 <div class="form-group">
                                     <label for="txtScan2">Scan</label>
                                     <div class="input-group">
@@ -129,44 +147,9 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <video id="preview" style="width: 100%"></video>
+                                            <video id="preview" style="border: 1px solid gray; width: 100%"></video>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm">
-                <div id="accordion2">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">
-                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-right1"
-                                    aria-expanded="true" aria-controls="collapse-right1">
-                                    Collapsible Group Item #1
-                                </button>
-                            </h5>
-                        </div>
-                        <div id="collapse-right1" class="collapse show" data-parent="#accordion2">
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label for="selCamera3">Camera</label>
-                                    <select class="form-control" id="selCamera3">
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="txtScan3">Scan</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="txtScan3">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button" id="btnScan3">Scan</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <video id="video" width="300" height="200" style="border: 1px solid gray"></video>
                                 </div>
                             </div>
                         </div>
@@ -189,36 +172,66 @@
         });
         // end BootstrapDialog
 
-        // begin Instascan
-        var scanner, cameras, dialog;
+        // begin ZXing
+        let selectedDeviceId, dialogScanner;
+        const codeReader = new ZXing.BrowserQRCodeReader();
+        //const codeReader = new ZXing.BrowserBarcodeReader();
         $(function () {
-            dialog = new BootstrapDialog({
+            function decodeContinuously(codeReader, selectedDeviceId) {
+                codeReader.decodeFromInputVideoDeviceContinuously(selectedDeviceId, "preview", (result, err) => {
+                    if (result) {
+                        // properly decoded qr code
+                        console.log('Found QR code!', result)
+                        $("#txtScan").val(result.text);
+                    }
+                    if (err) {
+                        // As long as this error belongs into one of the following categories
+                        // the code reader is going to continue as excepted. Any other error
+                        // will stop the decoding loop.
+                        //
+                        // Excepted Exceptions:
+                        //
+                        //  - NotFoundException
+                        //  - ChecksumException
+                        //  - FormatException
+                        if (err instanceof ZXing.NotFoundException) {
+                            console.log('No QR code found.')
+                        }
+                        if (err instanceof ZXing.ChecksumException) {
+                            console.log('A code was found, but it\'s read value was not valid.')
+                        }
+                        if (err instanceof ZXing.FormatException) {
+                            console.log('A code was found, but it was in a invalid format.')
+                        }
+                    }
+                })
+            }
+
+            dialogScanner = new BootstrapDialog({
                 message: $("#scanner"),
                 autodestroy: false,
                 onshown: function (dialogRef) {
-                    dialogRef.getModalBody().find("#txtScan").val("");
-                    if (!(scanner && cameras)) {
-                        scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
-                        scanner.addListener("scan", function (content) {
-                            dialog.getModalBody().find("#txtScan").val(content);
-                        });
-                        Instascan.Camera.getCameras().then(function (_cameras) {
-                            cameras = _cameras;
-                            if (cameras.length > 0) {
-                                scanner.start(cameras[0]);
-                                var $selCamera = dialogRef.getModalBody().find("#selCamera").empty();
-                                for (var i = 0; i < cameras.length; i++)
-                                    $selCamera.append($("<option>", { value: i, text: `Camera ${i + 1}` }));
-                                $selCamera.change(function () {
-                                    if (scanner && cameras)
-                                        scanner.start(cameras[parseInt($(this).val())]);
-                                });
-                            } else {
-                                console.error('No cameras found.');
-                            }
-                        }).catch(function (e) {
-                            console.error(e);
-                        });
+                    $("#txtScan").val("");
+                    if (!selectedDeviceId) {
+                        codeReader.getVideoInputDevices()
+                            .then((videoInputDevices) => {
+                                const sourceSelect = $("#selCamera");
+                                selectedDeviceId = videoInputDevices[0].deviceId;
+                                if (videoInputDevices.length >= 1) {
+                                    videoInputDevices.forEach((element) => {
+                                        sourceSelect.append($("<option>", { value: element.deviceId, text: element.label }));
+                                    });
+                                    sourceSelect.change(() => {
+                                        selectedDeviceId = sourceSelect.val();
+                                        codeReader.reset();
+                                        decodeContinuously(codeReader, selectedDeviceId);
+                                    });
+                                    decodeContinuously(codeReader, selectedDeviceId);
+                                }
+                            })
+                            .catch((err) => {
+                                console.error(err);
+                            });
                     }
                 },
                 buttons: [{
@@ -229,60 +242,19 @@
                 }, {
                     label: "OK",
                     action: function (dialogRef) {
-                        $("#txtScan2").val($.trim(dialogRef.getModalBody().find("#txtScan").val()));
+                        $("#txtScan2").val($.trim($("#txtScan").val()));
                         dialogRef.close();
                     }
                 }]
             });
-            dialog.realize();
+            dialogScanner.realize();
 
             $("#btnScan").click(function () {
                 $("#txtScan2").val("");
-                dialog.open();
-            });
-
-            $("#btnScan3").click(function () {
-                try {
-                /*const*/codeReader = new ZXing.BrowserQRCodeReader();
-                    codeReader
-                        .listVideoInputDevices()
-                        .then(videoInputDevices => {
-                            var $selCamera = $("#selCamera3").empty();
-                            videoInputDevices.forEach(device =>
-                                $selCamera.append($("<option>", { value: device.deviceId, text: device.label }))
-                            );
-                            $selCamera.change(function () {
-                                $("#txtScan3").val("");
-                                codeReader.reset();
-                                codeReader
-                                    .decodeFromInputVideoDeviceContinuously($(this).val(), "video", result => {
-                                        if (result)
-                                            $("#txtScan3").val(result.text);
-                                        else
-                                            $("#txtScan3").val("");
-                                    })
-                                    .catch(err => console.error(err));
-                            });
-                            const firstDeviceId = videoInputDevices[0].deviceId;
-                            $("#txtScan3").val("");
-                            codeReader.reset();
-                            codeReader
-                                .decodeFromInputVideoDeviceContinuously(firstDeviceId, "video", result => {
-                                    if (result)
-                                        $("#txtScan3").val(result.text);
-                                    else
-                                        $("#txtScan3").val("");
-                                })
-                                .catch(err => console.error(err));
-                        })
-                        .catch(err => console.error(err));
-                }
-                catch (err) {
-                    console.error(err);
-                }
+                dialogScanner.open();
             });
         });
-        // end Instascan
+        // end ZXing
     </script>
 </body>
 
