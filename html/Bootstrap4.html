@@ -17,7 +17,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="lib/bootstrap4-dialog/dist/js/bootstrap-dialog.js"></script>
-    <script src="lib/zxing/dist/js/zxing.min.js"></script>
+    <script src="lib/zxing/dist/zxing.min.js"></script>
+    <script src="lib/jquery-serialize-object/dist/jquery.serialize-object.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -106,6 +107,42 @@
                         <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
                             data-parent="#accordion1">
                             <div class="card-body">
+                                <form id="formObject">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="input_objA_propA">objA.propA</label>
+                                            <input type="text" class="form-control" id="input_objA_propA"
+                                                name="objA[propA]">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="input_objA_propB">objA.propB</label>
+                                            <input type="text" class="form-control" id="input_objA_propB"
+                                                name="objA[propB]">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input_objB_propA">objB.propA</label>
+                                        <select id="input_objB_propA" class="form-control" name="objB[propA]">
+                                            <option hidden>Choose...</option>
+                                            <option>...</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="input_objB_propB"
+                                                name="objB[propB]">
+                                            <label class="form-check-label" for="input_objB_propB">
+                                                objB.propB
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-primary btn-sm"
+                                        onclick="formLoad()">Load</button>
+                                    <button type="button" class="btn btn-primary btn-sm"
+                                        onclick="formGet()">Get</button>
+                                    <button type="button" class="btn btn-primary btn-sm"
+                                        onclick="formClear()">Clear</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -171,6 +208,45 @@
             });
         });
         // end BootstrapDialog
+
+        // begin formObject
+        function formLoad() {
+            let obj = {
+                objA: {
+                    propA: "abc",
+                    propB: "xyz"
+                },
+                objB: {
+                    propA: "...",
+                    propB: true
+                }
+            };
+            let $form = $("#formObject");
+            jQuery.each(obj, function (name, item) {
+                jQuery.each(item, function (key, value) {
+                    let $input = $form.find(`[name='${name}[${key}]']`);
+                    if ($input.prop("type") === "checkbox")
+                        $input.prop("checked", value ? true : false);
+                    else
+                        $input.val(value);
+                });
+            });
+        }
+
+        function formGet() {
+            let obj = $("#formObject").serializeObject();
+            //console.log(obj);
+            BootstrapDialog.show({ message: JSON.stringify(obj) });
+        }
+
+        function formClear() {
+            $("#formObject [type='text']").val("");
+            $("#formObject [type='checkbox']").prop("checked", false);
+            $("#formObject select").each(function () {
+                $(this).val($(this).find("option:first").val());
+            });
+        }
+        // end
 
         // begin ZXing
         let selectedDeviceId, dialogScanner;
