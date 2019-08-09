@@ -137,11 +137,11 @@
                                         </div>
                                     </div>
                                     <button type="button" class="btn btn-primary btn-sm"
-                                        onclick="formLoad()">Load</button>
+                                        onclick="formSetObj()">Set</button>
                                     <button type="button" class="btn btn-primary btn-sm"
-                                        onclick="formGet()">Get</button>
+                                        onclick="formGetObj()">Get</button>
                                     <button type="button" class="btn btn-primary btn-sm"
-                                        onclick="formClear()">Clear</button>
+                                        onclick="formClearObj()">Clear</button>
                                 </form>
                             </div>
                         </div>
@@ -210,7 +210,7 @@
         // end BootstrapDialog
 
         // begin formObject
-        function formLoad() {
+        function formSetObj() {
             let obj = {
                 objA: {
                     propA: "abc",
@@ -221,28 +221,49 @@
                     propB: true
                 }
             };
-            let $form = $("#formObject");
-            jQuery.each(obj, function (name, item) {
-                jQuery.each(item, function (key, value) {
-                    let $input = $form.find(`[name='${name}[${key}]']`);
-                    if ($input.prop("type") === "checkbox")
-                        $input.prop("checked", value ? true : false);
-                    else
-                        $input.val(value);
-                });
-            });
+            formSet($("#formObject"), obj);
         }
 
-        function formGet() {
-            let obj = $("#formObject").serializeObject();
+        function formGetObj() {
+            let obj = formGet($("#formObject"));
             //console.log(obj);
             BootstrapDialog.show({ message: JSON.stringify(obj) });
         }
 
-        function formClear() {
-            $("#formObject [type='text']").val("");
-            $("#formObject [type='checkbox']").prop("checked", false);
-            $("#formObject select").each(function () {
+        function formClearObj() {
+            formClear($("#formObject"));
+        }
+
+        function formSet($form, data) {
+            $.each(data, function (name, obj) {
+                if (typeof obj === "object") {
+                    $.each(obj, function (key, value) {
+                        if (typeof value !== "object" && typeof value !== "function") {
+                            var $input = $form.find(`[name='${name}[${key}]']`);
+                            if ($input.prop("type") === "checkbox" || $input.prop("type") === "radio")
+                                $input.prop("checked", value ? true : false);
+                            else
+                                $input.val(value);
+                        }
+                    });
+                }
+            });
+        }
+
+        function formGet($form, callback) {
+            $form.find("[type='text']").each(function () { $(this).val($.trim($(this).val())); });
+            var obj = $form.serializeObject();
+            if (typeof callback === "function") callback(obj);
+            return obj;
+        }
+
+        function formClear($form) {
+            $form.find("[type='hidden']").val("");
+            $form.find("[type='text']").val("");
+            $form.find("textarea").val("");
+            $form.find("[type='checkbox']").prop("checked", false);
+            $form.find("[type='radio']").prop("checked", false);
+            $form.find("select").each(function () {
                 $(this).val($(this).find("option:first").val());
             });
         }
