@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace HelloWorld
 {
@@ -38,6 +39,34 @@ namespace HelloWorld
                     return default(T);
                 }
             }
+        }
+
+        private static T DictionaryToObject<T>(IDictionary<string, object> dict) where T : new()
+        {
+            var t = new T();
+            System.Reflection.PropertyInfo[] properties = t.GetType().GetProperties();
+
+            foreach (System.Reflection.PropertyInfo property in properties)
+            {
+                if (!dict.Any(x => x.Key.Equals(property.Name, StringComparison.InvariantCultureIgnoreCase)))
+                    continue;
+
+                KeyValuePair<string, object> item = dict.First(x => x.Key.Equals(property.Name, StringComparison.InvariantCultureIgnoreCase));
+
+                // Find which property type (int, string, double? etc) the CURRENT property is...
+                Type tPropertyType = t.GetType().GetProperty(property.Name).PropertyType;
+
+                // Fix nullables...
+                Type newT = Nullable.GetUnderlyingType(tPropertyType) ?? tPropertyType;
+
+                // ...and change the type
+                if (item.Value != null)
+                {
+                    object newA = Convert.ChangeType(item.Value, newT);
+                    t.GetType().GetProperty(property.Name).SetValue(t, newA, null);
+                }
+            }
+            return t;
         }
 
         public static IEnumerable<List<T>> SplitList<T>(List<T> list, int nSize)
