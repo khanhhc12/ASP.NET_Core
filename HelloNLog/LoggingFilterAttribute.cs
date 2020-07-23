@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using NLog;
 using Newtonsoft.Json;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using System;
 using System.Linq;
-using System.Collections.Generic;
 
 namespace HelloNLog
 {
