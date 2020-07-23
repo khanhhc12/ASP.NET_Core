@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -26,11 +27,11 @@ namespace HelloJWT.Controllers
         public object Login([FromBody] UserModel login)
         {
             if (login != null && login.Username != null)
-                return new { token = CreateToken(login.Username) };
+                return new { token = CreateToken(login.Username, new string[] { AuthorizeRole.Admin }) };
             return null;
         }
 
-        private string CreateToken(string Username)
+        private string CreateToken(string username, string[] roles)
         {
             //Set issued at date
             DateTime notBefore = DateTime.Now;
@@ -41,10 +42,12 @@ namespace HelloJWT.Controllers
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             //create a identity and add claims to the user which we want to log in
-            var claims = new[]
+            var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, Username)
+                new Claim(ClaimTypes.Name, username)
             };
+            foreach (string role in roles)
+                claims.Add(new Claim(ClaimTypes.Role, role));
 
             //Create the jwt (JSON Web Token)
             var token = new JwtSecurityToken(

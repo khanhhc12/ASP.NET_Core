@@ -9,19 +9,12 @@ namespace HelloJWT.Controllers
     [Route("api/[controller]")]
     public class ValuesController : ControllerBase
     {
-        [Authorize]
+        [Authorize(Roles = AuthorizeRole.Admin)]
         [HttpGet]
-        public string Get()
+        public object Get()
         {
             var currentUser = HttpContext.User;
-
-            if (currentUser.HasClaim(c => c.Type == ClaimTypes.Name))
-            {
-                return currentUser.Claims.Where(c => c.Type == ClaimTypes.Name)
-                   .Select(c => c.Value).SingleOrDefault();
-            }
-
-            return "";
+            return currentUser.Claims.Select(c => new { Type = c.Type, Value = c.Value });
         }
     }
 }
