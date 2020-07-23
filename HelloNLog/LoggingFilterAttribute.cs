@@ -16,10 +16,10 @@ namespace HelloNLog
             // do something before the action executes
             try
             {
-                var theEvent = new LogEventInfo(NLog.LogLevel.FromString("Trace"), "", context.HttpContext.Request.Method);
                 if (context.ActionArguments.Count > 0)
-                    theEvent.Properties["body"] = JsonConvert.SerializeObject(context.ActionArguments.ToDictionary(d => d.Key, d => d.Value));
-                _logger.Log(theEvent);
+                    _logger.Trace(JsonConvert.SerializeObject(context.ActionArguments.ToDictionary(d => d.Key, d => d.Value)));
+                else
+                    _logger.Trace(context.HttpContext.Request.Method);
             }
             catch (Exception ex)
             {
