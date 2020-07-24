@@ -19,6 +19,7 @@ namespace HelloNLog.Controllers
             public string text { get; set; }
             [JsonIgnore]
             public string ignore { get; set; }
+            public string ignore2 { internal get; set; }
         }
     }
 }
