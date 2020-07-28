@@ -14,10 +14,8 @@ namespace HelloNLog
             // do something before the action executes
             try
             {
-                if (context.ActionArguments.Count > 0)
-                    _logger.Trace(JsonConvert.SerializeObject(context.ActionArguments.ToDictionary(d => d.Key, d => d.Value)));
-                else
-                    _logger.Trace(context.HttpContext.Request.Method);
+                string method = (context.HttpContext.Request.Method ?? "").ToUpper();
+                _logger.Trace(method == "GET" ? "GET" : JsonConvert.SerializeObject(context.ActionArguments));
             }
             catch (Exception ex)
             {
