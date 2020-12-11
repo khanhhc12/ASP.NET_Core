@@ -9,11 +9,10 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/bin/Debug/netcoreapp2.2/HelloMongoDB.dll",
+            "program": "${workspaceFolder}/bin/Debug/net5.0/HelloMongoDB.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
-            //"console": "internalConsole",
-            "console": "integratedTerminal",
+            "console": "internalConsole",
             "stopAtEntry": false
         },
         {
