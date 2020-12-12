@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using HelloSignalR.Models;
 using Microsoft.AspNetCore.SignalR;
 
@@ -11,10 +12,12 @@ namespace HelloSignalR.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ILogger<HomeController> _logger;
         private readonly IHubContext<NotificationHub> _hubContext;
 
-        public HomeController(IHubContext<NotificationHub> hubContext)
+        public HomeController(ILogger<HomeController> logger, IHubContext<NotificationHub> hubContext)
         {
+            _logger = logger;
             _hubContext = hubContext;
         }
 
