@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Quartz;
 using Quartz.Impl;
 
@@ -27,14 +27,8 @@ namespace HelloQuartz
             List<JobModel> list = new List<JobModel>();
             try
             {
-                //if (File.Exists(fileJson))
-                //    list = JsonConvert.DeserializeObject<List<JobModel>>(File.ReadAllText(fileJson));
                 using (var stream = File.Open(fileJson, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                using (StreamReader file = new StreamReader(stream))
-                {
-                    JsonSerializer serializer = new JsonSerializer();
-                    list = serializer.Deserialize(file, typeof(List<JobModel>)) as List<JobModel>;
-                }
+                    list = await JsonSerializer.DeserializeAsync<List<JobModel>>(stream);
             }
             catch (Exception ex)
             {
