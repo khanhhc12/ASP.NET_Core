@@ -2,12 +2,12 @@ using OfficeOpenXml;
 using System;
 using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Reflection;
 using OfficeOpenXml.Style;
 using System.Drawing;
+using System.Text.Json;
 
 namespace HelloEPPlus
 {
@@ -15,6 +15,8 @@ namespace HelloEPPlus
     {
         public static void ReadExcel()
         {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
             var excelFile = new FileInfo(Path.Combine(Directory.GetCurrentDirectory(), "xlsx\\sample.xlsx"));
             using (var package = new ExcelPackage(excelFile))
             {
@@ -43,7 +45,8 @@ namespace HelloEPPlus
                     }
 
                     var listObj = list.Select(c => DictionaryToObject<SimpleModel>(c)).ToList();
-                    Console.WriteLine(JsonConvert.SerializeObject(new { sheet = sheet.Name, cells = list, models = listObj }, Formatting.Indented));
+                    var options = new JsonSerializerOptions { WriteIndented = true };
+                    Console.WriteLine(JsonSerializer.Serialize(new { sheet = sheet.Name, cells = list, models = listObj }, options));
                 }
             }
         }
@@ -67,7 +70,8 @@ namespace HelloEPPlus
                     item.col3 = sheet.Cells[row, 3].Text;
                     list.Add(item);
                 }
-                Console.WriteLine(JsonConvert.SerializeObject(new { cells = list }, Formatting.Indented));
+                var options = new JsonSerializerOptions { WriteIndented = true };
+                Console.WriteLine(JsonSerializer.Serialize(new { cells = list }, options));
             }
         }
 
@@ -111,7 +115,7 @@ namespace HelloEPPlus
                 p.SaveAs(excelFile);
             }
         }
-        
+
         private static DateTime? DateTimeExact(string value)
         {
             DateTime dateTime = new DateTime();
